@@ -136,10 +136,44 @@
       height: 146px;
       border-radius: 50%;
       z-index: 1;
-      border: 1.5px solid rgba(142, 216, 255, 0.9);
-      background: radial-gradient(circle, rgba(142, 216, 255, 0.18) 0%, rgba(142, 216, 255, 0.02) 74%, transparent 100%);
-      box-shadow: 0 0 18px rgba(142, 216, 255, 0.16), inset 0 0 18px rgba(142, 216, 255, 0.08);
-      transition: transform 0.8s ease, box-shadow 0.8s ease, border-color 0.8s ease, background 0.8s ease;
+      border: 1.4px solid rgba(142, 216, 255, 0.85);
+      background: radial-gradient(circle, rgba(142, 216, 255, 0.16) 0%, rgba(142, 216, 255, 0.04) 72%, transparent 100%);
+      box-shadow: 0 0 18px rgba(142, 216, 255, 0.16), inset 0 0 16px rgba(142, 216, 255, 0.1);
+      animation: breathCycle 12s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      will-change: transform, box-shadow, background, border-color;
+    }
+
+    @keyframes breathCycle {
+      0%, 100% {
+        transform: scale(0.82);
+        border-color: rgba(142, 216, 255, 0.88);
+        box-shadow: 0 0 18px rgba(142, 216, 255, 0.20), inset 0 0 16px rgba(142, 216, 255, 0.12);
+        background: radial-gradient(circle, rgba(142, 216, 255, 0.16) 0%, rgba(142, 216, 255, 0.04) 72%, transparent 100%);
+      }
+      25% {
+        transform: scale(1.02);
+        border-color: rgba(142, 216, 255, 0.96);
+        box-shadow: 0 0 28px rgba(142, 216, 255, 0.25), inset 0 0 20px rgba(142, 216, 255, 0.12);
+        background: radial-gradient(circle, rgba(142, 216, 255, 0.2) 0%, rgba(142, 216, 255, 0.05) 72%, transparent 100%);
+      }
+      33% {
+        transform: scale(1.06);
+        border-color: rgba(165, 180, 252, 0.9);
+        box-shadow: 0 0 32px rgba(165, 180, 252, 0.20), inset 0 0 22px rgba(165, 180, 252, 0.12);
+        background: radial-gradient(circle, rgba(165, 180, 252, 0.18) 0%, rgba(165, 180, 252, 0.04) 72%, transparent 100%);
+      }
+      58% {
+        transform: scale(0.9);
+        border-color: rgba(127, 231, 197, 0.9);
+        box-shadow: 0 0 22px rgba(127, 231, 197, 0.20), inset 0 0 16px rgba(127, 231, 197, 0.10);
+        background: radial-gradient(circle, rgba(127, 231, 197, 0.12) 0%, rgba(127, 231, 197, 0.025) 72%, transparent 100%);
+      }
+      75% {
+        transform: scale(0.82);
+        border-color: rgba(127, 231, 197, 0.9);
+        box-shadow: 0 0 18px rgba(127, 231, 197, 0.18), inset 0 0 12px rgba(127, 231, 197, 0.09);
+        background: radial-gradient(circle, rgba(127, 231, 197, 0.10) 0%, rgba(127, 231, 197, 0.02) 72%, transparent 100%);
+      }
     }
 
     .center {
@@ -478,21 +512,18 @@
   <script>
     const STORAGE_KEY = 'pauza-steps-v1';
     const TIMER_KEY = 'pauza-timer-v1';
-    const CYCLE_MS = 12000;
     const TOTAL_SECONDS = 600;
     const ringBar = document.getElementById('ring-bar');
     const timerEl = document.getElementById('timer');
     const guideEl = document.getElementById('guide');
     const phaseEl = document.getElementById('phase');
     const badgeEl = document.getElementById('badge');
-    const orbEl = document.getElementById('breath-orb');
     const doneBanner = document.getElementById('done-banner');
     const factsPanel = document.getElementById('facts-panel');
     const factsBtn = document.getElementById('toggle-facts');
 
     let audioCtx = null;
     let timerLoop = null;
-    let lastNow = 0;
 
     function formatTime(totalSec) {
       const minutes = Math.floor(totalSec / 60);
@@ -529,61 +560,6 @@
         osc.start();
         osc.stop(audioCtx.currentTime + 1.7);
       } catch (e) {}
-    }
-
-    function setBreathPhase(elapsed, phaseStart) {
-      const cycle = elapsed % CYCLE_MS;
-      const inhale = 4000;
-      const holdIn = 1000;
-      const exhale = 5000;
-      const holdOut = 2000;
-
-      let labelText = 'Nádech · 4s';
-      let color = '#8ed8ff';
-      let borderColor = 'rgba(142,216,255,0.9)';
-      let glow = '0 0 26px rgba(142,216,255,0.22), inset 0 0 18px rgba(142,216,255,0.12)';
-      let scale = 0.82;
-      let bg = 'radial-gradient(circle, rgba(142, 216, 255, 0.18) 0%, rgba(142, 216, 255, 0.03) 72%, transparent 100%)';
-
-      if (cycle < inhale) {
-        const t = cycle / inhale;
-        labelText = `Nádech · ${Math.max(1, Math.ceil((inhale - cycle) / 1000))}s`;
-        scale = 0.82 + (1.04 - 0.82) * t;
-        color = '#8ed8ff';
-        borderColor = 'rgba(142,216,255,0.9)';
-        glow = '0 0 28px rgba(142,216,255,0.20), inset 0 0 18px rgba(142,216,255,0.12)';
-        bg = 'radial-gradient(circle, rgba(142,216,255,0.18) 0%, rgba(142,216,255,0.04) 74%, transparent 100%)';
-      } else if (cycle < inhale + holdIn) {
-        labelText = 'Zadrž · 1s';
-        scale = 1.04;
-        color = '#a5b4fc';
-        borderColor = 'rgba(165, 180, 252, 0.9)';
-        glow = '0 0 28px rgba(165,180,252,0.18), inset 0 0 20px rgba(165,180,252,0.10)';
-        bg = 'radial-gradient(circle, rgba(165,180,252,0.16) 0%, rgba(165,180,252,0.03) 74%, transparent 100%)';
-      } else if (cycle < inhale + holdIn + exhale) {
-        const t = (cycle - inhale - holdIn) / exhale;
-        labelText = `Výdech · ${Math.max(1, Math.ceil((exhale - (cycle - inhale - holdIn)) / 1000))}s`;
-        scale = 1.04 - (1.04 - 0.82) * t;
-        color = '#7fe7c5';
-        borderColor = 'rgba(127,231,197,0.9)';
-        glow = '0 0 24px rgba(127,231,197,0.18), inset 0 0 16px rgba(127,231,197,0.10)';
-        bg = 'radial-gradient(circle, rgba(127,231,197,0.16) 0%, rgba(127,231,197,0.03) 74%, transparent 100%)';
-      } else {
-        labelText = 'Klid · 1s';
-        scale = 0.82;
-        color = '#7fe7c5';
-        borderColor = 'rgba(127,231,197,0.9)';
-        glow = '0 0 16px rgba(127,231,197,0.14), inset 0 0 12px rgba(127,231,197,0.08)';
-        bg = 'radial-gradient(circle, rgba(127,231,197,0.12) 0%, transparent 74%)';
-      }
-
-      guideEl.textContent = labelText;
-      guideEl.style.color = color;
-      guideEl.style.borderColor = 'rgba(255,255,255,0.08)';
-      orbEl.style.transform = `scale(${scale})`;
-      orbEl.style.borderColor = borderColor;
-      orbEl.style.boxShadow = glow;
-      orbEl.style.background = bg;
     }
 
     function updatePhaseText(remaining) {
@@ -662,12 +638,32 @@
       saveSteps();
     }
 
+    function setGuideLabel(remainingSeconds) {
+      const phase = remainingSeconds % 12;
+      if (phase < 4) {
+        const rem = 4 - phase;
+        guideEl.textContent = `Nádech · ${rem}s`;
+        guideEl.style.color = '#8ed8ff';
+      } else if (phase === 4) {
+        guideEl.textContent = 'Zadrž · 1s';
+        guideEl.style.color = '#a5b4fc';
+      } else if (phase < 11) {
+        const rem = 11 - phase;
+        guideEl.textContent = `Výdech · ${rem}s`;
+        guideEl.style.color = '#7fe7c5';
+      } else {
+        guideEl.textContent = 'Klid · 1s';
+        guideEl.style.color = '#7fe7c5';
+      }
+    }
+
     function startTimer(deadline) {
       clearInterval(timerLoop);
       timerLoop = setInterval(() => {
         const remainingMs = Math.max(0, deadline - Date.now());
         const remaining = Math.ceil(remainingMs / 1000);
         renderTimer(remaining);
+        setGuideLabel(remaining);
 
         if (remaining <= 0) {
           clearInterval(timerLoop);
@@ -708,6 +704,7 @@
 
         startTimer(saved.deadline);
         renderTimer(remaining);
+        setGuideLabel(remaining);
       } catch (e) {
         startTimer(Date.now() + TOTAL_SECONDS * 1000);
       }
@@ -720,22 +717,9 @@
         : 'Zobrazit fakta: co se teď děje v mém mozku? ↓';
     }
 
-    function tick(now) {
-      const elapsed = now - lastNow;
-      if (lastNow === 0) {
-        lastNow = now;
-      }
-      const breathElapsed = now % CYCLE_MS;
-      setBreathPhase(breathElapsed, lastNow);
-      if (timerLoop === null) {
-        // keep the breathing state in sync even during a static pause
-      }
-      requestAnimationFrame(tick);
-    }
-
     restoreSteps();
     restoreTimer();
-    requestAnimationFrame(tick);
+    setGuideLabel(TOTAL_SECONDS);
   </script>
 </body>
 </html>
