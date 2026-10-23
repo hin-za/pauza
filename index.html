@@ -14,6 +14,7 @@
     --accent: #10b981;
     --accent-dim: rgba(16, 185, 129, 0.12);
     --blue: #38bdf8;
+    --indigo: #818cf8;
     --amber: #f59e0b;
     --amber-dim: rgba(245, 158, 11, 0.15);
     --alert: #f87171;
@@ -61,6 +62,7 @@
     border-radius: 99px; 
     margin-bottom: 0.85rem; 
     border: 1px solid rgba(245, 158, 11, 0.3); 
+    transition: all 0.5s ease;
   }
   
   /* 2 řádky nadpisu */
@@ -121,43 +123,50 @@
     transition: stroke-dashoffset 0.5s linear, stroke 1s ease;
   }
 
-  /* Plynulá dýchající aura s přirozenou 1s pauzou */
+  /* Vnitřní dýchající aura s proměnou barev a hloubkovou září */
   .breath-aura { 
     position: absolute; 
     width: 145px; 
     height: 145px; 
     border-radius: 50%; 
     background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, rgba(56, 189, 248, 0.02) 75%);
-    border: 1.5px solid rgba(56, 189, 248, 0.4);
-    transform: scale(0.75);
-    transition: transform 4s cubic-bezier(0.4, 0, 0.2, 1), background 1s ease, border-color 1s ease; 
+    border: 2px solid rgba(56, 189, 248, 0.5);
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.25), inset 0 0 15px rgba(56, 189, 248, 0.15);
+    transform: scale(0.74);
+    transition: transform 4s cubic-bezier(0.25, 1, 0.5, 1), border-color 1.2s ease, box-shadow 1.2s ease, background 1.2s ease; 
     z-index: 1;
   }
   
   .breath-aura.inhale { 
-    transform: scale(1.15); 
-    background: radial-gradient(circle, rgba(56, 189, 248, 0.3) 0%, rgba(56, 189, 248, 0.02) 75%);
-    border-color: rgba(56, 189, 248, 0.65);
+    transform: scale(1.18); 
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.35) 0%, rgba(56, 189, 248, 0.03) 75%);
+    border-color: #38bdf8;
+    box-shadow: 0 0 35px rgba(56, 189, 248, 0.45), inset 0 0 25px rgba(56, 189, 248, 0.25);
     transition-duration: 4s; 
   }
   
   .breath-aura.hold-top {
-    transform: scale(1.15);
-    border-color: rgba(56, 189, 248, 0.85);
-    transition-duration: 1s;
+    transform: scale(1.18);
+    background: radial-gradient(circle, rgba(129, 140, 248, 0.32) 0%, rgba(129, 140, 248, 0.03) 75%);
+    border-color: #818cf8;
+    box-shadow: 0 0 40px rgba(129, 140, 248, 0.5), inset 0 0 30px rgba(129, 140, 248, 0.3);
+    transition: border-color 0.8s ease, box-shadow 0.8s ease, background 0.8s ease;
   }
 
   .breath-aura.exhale { 
-    transform: scale(0.75); 
-    background: radial-gradient(circle, rgba(16, 185, 129, 0.28) 0%, rgba(16, 185, 129, 0.02) 75%);
-    border-color: rgba(16, 185, 129, 0.55);
+    transform: scale(0.74); 
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.32) 0%, rgba(16, 185, 129, 0.02) 75%);
+    border-color: #10b981;
+    box-shadow: 0 0 25px rgba(16, 185, 129, 0.4), inset 0 0 15px rgba(16, 185, 129, 0.2);
     transition-duration: 6s; 
   }
 
   .breath-aura.hold-bottom {
-    transform: scale(0.75);
-    border-color: rgba(16, 185, 129, 0.3);
-    transition-duration: 1s;
+    transform: scale(0.74);
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 75%);
+    border-color: rgba(16, 185, 129, 0.4);
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+    transition: border-color 0.8s ease, box-shadow 0.8s ease;
   }
   
   .center-data { 
@@ -184,10 +193,12 @@
     margin-top: 0.4rem; 
     text-transform: uppercase; 
     letter-spacing: 0.05em;
-    background: rgba(15, 23, 42, 0.85);
+    background: rgba(15, 23, 42, 0.88);
     padding: 0.22rem 0.65rem;
     border-radius: 99px;
     white-space: nowrap;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: color 0.5s ease;
   }
 
   .phase-status {
@@ -198,7 +209,7 @@
   }
   .phase-status strong { color: var(--text); }
 
-  /* Evidence-based Checklist (KBT & DBT) */
+  /* Checklist (KBT & DBT) */
   .checklist { text-align: left; display: flex; flex-direction: column; gap: 0.55rem; margin-bottom: 1rem; }
   .check-item { 
     display: flex; 
@@ -245,7 +256,7 @@
   }
   .check-text { font-size: 0.88rem; line-height: 1.35; color: var(--text); }
 
-  /* Potvrzovací box po dokončení všech 3 úkolů */
+  /* Potvrzovací banner po zaškrtnutí všech 3 kroků */
   .all-done-banner {
     display: none;
     background: rgba(16, 185, 129, 0.12);
@@ -293,7 +304,7 @@
   .detail-body ul { padding-left: 1.1rem; margin-top: 0.4rem; }
   .detail-body li { margin-bottom: 0.35rem; }
 
-  /* Signální varování */
+  /* Zvýraznění */
   .alert-text { color: var(--alert); font-weight: 600; }
   .alert-tag { background: var(--alert-dim); color: var(--alert); padding: 0.15rem 0.45rem; border-radius: 4px; font-weight: 600; font-size: 0.82rem; }
   .safe-text { color: var(--accent); font-weight: 600; }
@@ -350,10 +361,10 @@
       </div>
     </div>
 
-    <!-- Dynamická hláška po zaškrtnutí všech 3 úkolů -->
+    <!-- Vyladěný lidský potvrzovací banner -->
     <div class="all-done-banner" id="all-done">
-      <strong>✓ Fyzický automatismus úspěšně přerušen.</strong><br>
-      Prefrontální kůra převzala řízení. Tělo je v bezpečí, teď už jen v klidu dýchej a nech dojet časovač.
+      <strong>✓ První a nejtěžší krok máš za sebou – přerušil jsi naučený reflex.</strong><br>
+      Hlava začíná znovu jasně přemýšlet. Tělo je v bezpečí, teď už jen v klidu dýchej a nech vlnu doznít.
     </div>
 
     <button class="toggle-science" onclick="toggleScience()" id="sci-btn">
@@ -361,24 +372,24 @@
     </button>
   </div>
 
-  <!-- Kognitivní fakta s červenými varovnými prvky -->
+  <!-- Přirozeně formulované kognitivní karty -->
   <div class="science-panel" id="sci-panel">
     
     <details>
       <summary>1. Emoční anestezie (Proč teď mozek křičí)</summary>
       <div class="detail-body">
-        Většina nutkání nevzniká z přebytku sexuální energie, ale jako <span class="alert-text">únik od nepříjemného pocitu</span> (stres, samota, vyčerpání).<br><br>
-        <span class="alert-text">Pokud na stres odpovíš pornem, učíš mozek zkratce.</span> Když teď vydržíš 10 minut, doslova posiluješ prefrontální kůru (centrum vůle).
+        Většina nutkání nevzniká z přetlaku sexuální energie, ale jako <span class="alert-text">únik od nepříjemného pocitu</span> – stresu, samoty, nudy nebo vyčerpání.<br><br>
+        <span class="alert-text">Pokud na stres pokaždé odpovíš pornem, učíš mozek zkratce.</span> Když teď vydržíš těchto 10 minut, doslova posiluješ svou vůli a učíš nervovou soustavu zvládnout napětí bez berliček.
       </div>
     </details>
 
     <details>
       <summary>2. Mechanický návyk a výkonnostní úzkost</summary>
       <div class="detail-body">
-        Problémy v posteli nevznikají „zničením mozku“, ale dvěma fyziologickými faktory:
+        Problémy v intimitě nevznikají „zničením mozku“, ale dvěma čistě fyziologickými faktory:
         <ul>
-          <li><span class="alert-tag">Death Grip</span> Ruka vyvíjí tlak a rychlost, kterým žádné reálné tělo nemůže konkurovat.</li>
-          <li><span class="alert-tag">Divácká role (Spectatoring)</span> Zvyk dívat se na obrazovku vede k tomu, že při reálném sexu hodnotíš sám sebe zvenčí, což <span class="alert-text">vyplaví adrenalin a fyziologicky zablokuje erekci</span>.</li>
+          <li><span class="alert-tag">Death Grip</span> Ruka si zvykne na silný tlak a rychlost, kterým žádné lidské tělo při běžném styku nedokáže konkurovat.</li>
+          <li><span class="alert-tag">Divácká role (Spectatoring)</span> Zvyk sledovat sex na displeji vede k tomu, že v realitě hodnotíš sám sebe zvenčí. To <span class="alert-text">vyplaví stresový adrenalin a okamžitě zablokuje erekci</span>.</li>
         </ul>
       </div>
     </details>
@@ -386,19 +397,19 @@
     <details>
       <summary>3. Past studu a mýtus „Dne 0“</summary>
       <div class="detail-body">
-        <span class="alert-text">Stud je palivem relapsu:</span> Stud říká <em>„Jsem slaboch“</em>, což vyvolá emoční bolest, kterou chce mozek opět utlumit pornem.<br><br>
-        I kdybys uklouzl, tvoje předchozí dny a týdny se nemažou. Nervové dráhy se budují kumulativně – <span class="safe-text">žádný „Den 0“ v biologii neexistuje</span>.
+        <span class="alert-text">Stud je hlavním palivem relapsu:</span> Stud říká <em>„Jsem slaboch a selhal jsem“</em>. To vyvolá hlubokou emoční bolest, kterou chce mozek okamžitě znovu otupit pornem.<br><br>
+        I kdybys někdy zakolísal, tvůj dosavadní pokrok nikam nemizí. Nervové dráhy se v mozku budují postupně – <span class="safe-text">žádný „Den 0“ v lidské biologii neexistuje</span>.
       </div>
     </details>
 
     <details>
-      <summary>4. Kde vybít dopamin hned teď</summary>
+      <summary>4. Kde vybít tělesný neklid hned teď</summary>
       <div class="detail-body">
-        <span class="alert-text">Nahromaděný neklid nepřemůžeš sezením u obrazovky.</span> Přetav ho do pohybu:
+        <span class="alert-text">Nahromaděné napětí nepřemůžeš pasivním sezením u obrazovky.</span> Přetav ho do fyzické akce:
         <ul>
-          <li>Udělej 20 kliků nebo dřepů do zadýchání.</li>
-          <li>Jdi na 5 minut ven na čerstvý vzduch bez telefonu.</li>
-          <li>Pusť si studenou sprchu na 30 vteřin (okamžitý přirozený nárůst dopaminu a noradrenalinu bez propadu).</li>
+          <li>Udělej 20 rychlých kliků nebo dřepů až do zadýchání.</li>
+          <li>Jdi na 5 minut ven na chladný vzduch – ideálně bez telefonu.</li>
+          <li>Dej si krátkou studenou sprchu (spustí přirozený a dlouhodobý vzestup dopaminu bez následného propadu).</li>
         </ul>
       </div>
     </details>
@@ -422,7 +433,7 @@
   const allDoneBanner = document.getElementById('all-done');
   const badgePill = document.getElementById('badge-pill');
 
-  // 1. Zvukový systém s odemčením při prvním dotyku
+  // 1. Audio odemčení při prvním dotyku
   let audioCtx = null;
   function unlockAudio() {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -447,7 +458,7 @@
     } catch(e) {}
   }
 
-  // 2. Interaktivní checklist s kontrolou dokončení
+  // 2. Interaktivní checklist s kontrolou splnění všech 3 úkolů
   function toggleTask(el) {
     el.classList.toggle('done');
     const allItems = document.querySelectorAll('.check-item');
@@ -459,7 +470,7 @@
     }
   }
 
-  // 3. Přesný hlavní časovač (10 minut na bázi Date.now) s barevnou gradací
+  // 3. Hlavní 10minutový časovač na bázi Date.now (bez zrychlování)
   const totalTime = 600;
   const startTime = Date.now();
   const circumference = 597;
@@ -474,7 +485,7 @@
     const offset = circumference - (elapsed / totalTime) * circumference;
     progressBar.style.strokeDashoffset = Math.max(0, offset);
 
-    // Barevná gradace kruhu: Jantarová (excitace) -> Modrá (rovnováha) -> Smaragdová (klid)
+    // Barevná gradace vnějšího kruhu: Jantarová -> Modrá -> Smaragdová
     if (sec > 360) {
       progressBar.style.stroke = 'var(--amber)';
     } else if (sec > 180) {
@@ -499,29 +510,34 @@
       timerEl.innerText = "HOTOVO";
       timerEl.style.fontSize = "1.8rem";
       label.innerText = "Vlna překonána";
+      label.style.color = "var(--accent)";
       phaseText.innerHTML = "<strong>Zvládl jsi to.</strong> Zvyková dráha byla úspěšně oslabena.";
       playChime();
     }
   }, 250);
 
-  // 4. Kalibrovaný dechový cyklus (12s = 4s nádech | 1s drž | 6s výdech | 1s klid)
+  // 4. Rezonanční dechový cyklus (12s) s barevnou vnitřní aurou
   let breathSec = 0;
   function updateBreath() {
     if (breathSec < 4) {
+      // 0..3 (4s): Nádech nosem (svěží modrá)
       if (breathSec === 0) aura.className = 'breath-aura inhale';
       const rem = 4 - breathSec;
       label.innerText = `Nádech nosem · ${rem}s`;
       label.style.color = '#38bdf8';
     } else if (breathSec === 4) {
+      // 4 (1s): Zadržení nahoře (indigová pauza)
       aura.className = 'breath-aura hold-top';
       label.innerText = 'Drž dech · 1s';
-      label.style.color = '#38bdf8';
+      label.style.color = '#818cf8';
     } else if (breathSec < 11) {
+      // 5..10 (6s): Dlouhý výdech (smaragdová zeleň pro parasympatikus)
       if (breathSec === 5) aura.className = 'breath-aura exhale';
       const rem = 11 - breathSec;
       label.innerText = `Dlouhý výdech ústy · ${rem}s`;
       label.style.color = '#10b981';
     } else {
+      // 11 (1s): Klid dole (jemné doznění)
       aura.className = 'breath-aura hold-bottom';
       label.innerText = 'Klid · 1s';
       label.style.color = '#10b981';
