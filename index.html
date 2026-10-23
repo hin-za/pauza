@@ -123,50 +123,52 @@
     transition: stroke-dashoffset 0.5s linear, stroke 1s ease;
   }
 
-  /* Vnitřní dýchající aura s proměnou barev a hloubkovou září */
+  /* Dokonale plynulý dechový kruh ve stylu xhalr (čisté GPU keyframes) */
   .breath-aura { 
     position: absolute; 
     width: 145px; 
     height: 145px; 
     border-radius: 50%; 
-    background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, rgba(56, 189, 248, 0.02) 75%);
-    border: 2px solid rgba(56, 189, 248, 0.5);
-    box-shadow: 0 0 20px rgba(56, 189, 248, 0.25), inset 0 0 15px rgba(56, 189, 248, 0.15);
-    transform: scale(0.74);
-    transition: transform 4s cubic-bezier(0.25, 1, 0.5, 1), border-color 1.2s ease, box-shadow 1.2s ease, background 1.2s ease; 
     z-index: 1;
-  }
-  
-  .breath-aura.inhale { 
-    transform: scale(1.18); 
-    background: radial-gradient(circle, rgba(56, 189, 248, 0.35) 0%, rgba(56, 189, 248, 0.03) 75%);
-    border-color: #38bdf8;
-    box-shadow: 0 0 35px rgba(56, 189, 248, 0.45), inset 0 0 25px rgba(56, 189, 248, 0.25);
-    transition-duration: 4s; 
-  }
-  
-  .breath-aura.hold-top {
-    transform: scale(1.18);
-    background: radial-gradient(circle, rgba(129, 140, 248, 0.32) 0%, rgba(129, 140, 248, 0.03) 75%);
-    border-color: #818cf8;
-    box-shadow: 0 0 40px rgba(129, 140, 248, 0.5), inset 0 0 30px rgba(129, 140, 248, 0.3);
-    transition: border-color 0.8s ease, box-shadow 0.8s ease, background 0.8s ease;
+    animation: xhalrBreath 12s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   }
 
-  .breath-aura.exhale { 
-    transform: scale(0.74); 
-    background: radial-gradient(circle, rgba(16, 185, 129, 0.32) 0%, rgba(16, 185, 129, 0.02) 75%);
-    border-color: #10b981;
-    box-shadow: 0 0 25px rgba(16, 185, 129, 0.4), inset 0 0 15px rgba(16, 185, 129, 0.2);
-    transition-duration: 6s; 
-  }
-
-  .breath-aura.hold-bottom {
-    transform: scale(0.74);
-    background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 75%);
-    border-color: rgba(16, 185, 129, 0.4);
-    box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
-    transition: border-color 0.8s ease, box-shadow 0.8s ease;
+  @keyframes xhalrBreath {
+    /* 0s: Výchozí stav (začátek nádechu) */
+    0% {
+      transform: scale(0.72);
+      border: 2px solid #38bdf8;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.25), inset 0 0 15px rgba(56, 189, 248, 0.15);
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.2) 0%, transparent 75%);
+    }
+    /* 4s (33.3%): Plný nádech */
+    33.3% {
+      transform: scale(1.18);
+      border: 2px solid #38bdf8;
+      box-shadow: 0 0 35px rgba(56, 189, 248, 0.45), inset 0 0 25px rgba(56, 189, 248, 0.25);
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.35) 0%, rgba(56, 189, 248, 0.03) 75%);
+    }
+    /* 5s (41.6%): Konec 1s zádrže nahoře (fialový záblesk) */
+    41.6% {
+      transform: scale(1.18);
+      border: 2px solid #818cf8;
+      box-shadow: 0 0 40px rgba(129, 140, 248, 0.5), inset 0 0 30px rgba(129, 140, 248, 0.3);
+      background: radial-gradient(circle, rgba(129, 140, 248, 0.32) 0%, rgba(129, 140, 248, 0.03) 75%);
+    }
+    /* 11s (91.6%): Konec 6s výdechu (smaragdová zeleň) */
+    91.6% {
+      transform: scale(0.72);
+      border: 2px solid #10b981;
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.4), inset 0 0 15px rgba(16, 185, 129, 0.2);
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.28) 0%, rgba(16, 185, 129, 0.02) 75%);
+    }
+    /* 12s (100%): Konec 1s klidu dole */
+    100% {
+      transform: scale(0.72);
+      border: 2px solid #38bdf8;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.25), inset 0 0 15px rgba(56, 189, 248, 0.15);
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.2) 0%, transparent 75%);
+    }
   }
   
   .center-data { 
@@ -198,7 +200,7 @@
     border-radius: 99px;
     white-space: nowrap;
     border: 1px solid rgba(255, 255, 255, 0.08);
-    transition: color 0.5s ease;
+    transition: color 0.4s ease;
   }
 
   .phase-status {
@@ -225,7 +227,6 @@
   }
   .check-item:hover { border-color: #384d78; background: #1d2840; }
   
-  /* Zaškrtnutý stav: zelený rámeček, šedý text, přeškrtnutá písmena */
   .check-item.done { 
     background: rgba(16, 185, 129, 0.08); 
     border-color: rgba(16, 185, 129, 0.45); 
@@ -256,21 +257,21 @@
   }
   .check-text { font-size: 0.88rem; line-height: 1.35; color: var(--text); }
 
-  /* Potvrzovací banner po zaškrtnutí všech 3 kroků */
+  /* Přirozený a kompaktní potvrzovací banner */
   .all-done-banner {
     display: none;
     background: rgba(16, 185, 129, 0.12);
     border: 1px solid var(--accent);
     border-radius: 12px;
-    padding: 0.85rem 1rem;
+    padding: 0.8rem 1rem;
     margin-bottom: 1.25rem;
     font-size: 0.85rem;
     color: #a7f3d0;
-    line-height: 1.45;
+    line-height: 1.4;
     text-align: left;
     animation: fadeIn 0.3s ease;
   }
-  .all-done-banner strong { color: #fff; }
+  .all-done-banner strong { color: #fff; font-size: 0.9rem; }
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-5px); }
     to { opacity: 1; transform: translateY(0); }
@@ -304,7 +305,7 @@
   .detail-body ul { padding-left: 1.1rem; margin-top: 0.4rem; }
   .detail-body li { margin-bottom: 0.35rem; }
 
-  /* Zvýraznění */
+  /* Signální varování */
   .alert-text { color: var(--alert); font-weight: 600; }
   .alert-tag { background: var(--alert-dim); color: var(--alert); padding: 0.15rem 0.45rem; border-radius: 4px; font-weight: 600; font-size: 0.82rem; }
   .safe-text { color: var(--accent); font-weight: 600; }
@@ -361,10 +362,10 @@
       </div>
     </div>
 
-    <!-- Vyladěný lidský potvrzovací banner -->
+    <!-- Kompaktní potvrzovací banner bez lámání řádku -->
     <div class="all-done-banner" id="all-done">
-      <strong>✓ První a nejtěžší krok máš za sebou – přerušil jsi naučený reflex.</strong><br>
-      Hlava začíná znovu jasně přemýšlet. Tělo je v bezpečí, teď už jen v klidu dýchej a nech vlnu doznít.
+      <strong>✓ Reflex přerušen – hlava se čistí.</strong><br>
+      Teď už jen v klidu dýchej a nech vlnu doznít.
     </div>
 
     <button class="toggle-science" onclick="toggleScience()" id="sci-btn">
@@ -372,7 +373,7 @@
     </button>
   </div>
 
-  <!-- Přirozeně formulované kognitivní karty -->
+  <!-- Kognitivní fakta -->
   <div class="science-panel" id="sci-panel">
     
     <details>
@@ -426,7 +427,6 @@
   const timerEl = document.getElementById('timer');
   const progressBar = document.getElementById('progress-bar');
   const phaseText = document.getElementById('phase-text');
-  const aura = document.getElementById('aura');
   const label = document.getElementById('breath-label');
   const sciPanel = document.getElementById('sci-panel');
   const sciBtn = document.getElementById('sci-btn');
@@ -458,7 +458,7 @@
     } catch(e) {}
   }
 
-  // 2. Interaktivní checklist s kontrolou splnění všech 3 úkolů
+  // 2. Interaktivní checklist
   function toggleTask(el) {
     el.classList.toggle('done');
     const allItems = document.querySelectorAll('.check-item');
@@ -470,7 +470,7 @@
     }
   }
 
-  // 3. Hlavní 10minutový časovač na bázi Date.now (bez zrychlování)
+  // 3. Hlavní 10minutový časovač na bázi Date.now
   const totalTime = 600;
   const startTime = Date.now();
   const circumference = 597;
@@ -516,37 +516,29 @@
     }
   }, 250);
 
-  // 4. Rezonanční dechový cyklus (12s) s barevnou vnitřní aurou
+  // 4. Synchronizované textové štítky k plynulé CSS animaci (12s cyklus)
   let breathSec = 0;
-  function updateBreath() {
+  function updateBreathGuide() {
     if (breathSec < 4) {
-      // 0..3 (4s): Nádech nosem (svěží modrá)
-      if (breathSec === 0) aura.className = 'breath-aura inhale';
       const rem = 4 - breathSec;
       label.innerText = `Nádech nosem · ${rem}s`;
       label.style.color = '#38bdf8';
     } else if (breathSec === 4) {
-      // 4 (1s): Zadržení nahoře (indigová pauza)
-      aura.className = 'breath-aura hold-top';
       label.innerText = 'Drž dech · 1s';
       label.style.color = '#818cf8';
     } else if (breathSec < 11) {
-      // 5..10 (6s): Dlouhý výdech (smaragdová zeleň pro parasympatikus)
-      if (breathSec === 5) aura.className = 'breath-aura exhale';
       const rem = 11 - breathSec;
       label.innerText = `Dlouhý výdech ústy · ${rem}s`;
       label.style.color = '#10b981';
     } else {
-      // 11 (1s): Klid dole (jemné doznění)
-      aura.className = 'breath-aura hold-bottom';
       label.innerText = 'Klid · 1s';
       label.style.color = '#10b981';
     }
     breathSec = (breathSec + 1) % 12;
   }
 
-  updateBreath();
-  const breathTimer = setInterval(updateBreath, 1000);
+  updateBreathGuide();
+  const breathTimer = setInterval(updateBreathGuide, 1000);
 
   // 5. Přepínání karet
   function toggleScience() {
