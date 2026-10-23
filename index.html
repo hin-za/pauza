@@ -14,6 +14,8 @@
     --accent: #10b981;
     --accent-dim: rgba(16, 185, 129, 0.12);
     --blue: #38bdf8;
+    --amber: #f59e0b;
+    --amber-dim: rgba(245, 158, 11, 0.15);
     --alert: #f87171;
     --alert-dim: rgba(248, 113, 113, 0.15);
   }
@@ -49,8 +51,8 @@
   
   .status-pill { 
     display: inline-block; 
-    background: var(--accent-dim); 
-    color: var(--accent); 
+    background: var(--amber-dim); 
+    color: var(--amber); 
     font-size: 0.72rem; 
     font-weight: 700; 
     text-transform: uppercase; 
@@ -58,7 +60,7 @@
     padding: 0.35rem 0.85rem; 
     border-radius: 99px; 
     margin-bottom: 0.85rem; 
-    border: 1px solid rgba(16, 185, 129, 0.3); 
+    border: 1px solid rgba(245, 158, 11, 0.3); 
   }
   
   /* 2 řádky nadpisu */
@@ -82,7 +84,7 @@
     margin-bottom: 1.4rem; 
   }
 
-  /* Kruhový vizualizér (SVG + vnitřní dechová aura) */
+  /* Kruhový vizualizér */
   .visualizer { 
     position: relative; 
     width: 210px; 
@@ -111,15 +113,15 @@
 
   .progress-ring__bar {
     fill: none;
-    stroke: var(--accent);
+    stroke: var(--amber);
     stroke-width: 5;
     stroke-linecap: round;
     stroke-dasharray: 597;
     stroke-dashoffset: 597;
-    transition: stroke-dashoffset 0.5s linear;
+    transition: stroke-dashoffset 0.5s linear, stroke 1s ease;
   }
 
-  /* Plynulá dýchající koule */
+  /* Plynulá dýchající aura s přirozenou 1s pauzou */
   .breath-aura { 
     position: absolute; 
     width: 145px; 
@@ -197,7 +199,7 @@
   .phase-status strong { color: var(--text); }
 
   /* Evidence-based Checklist (KBT & DBT) */
-  .checklist { text-align: left; display: flex; flex-direction: column; gap: 0.55rem; margin-bottom: 1.2rem; }
+  .checklist { text-align: left; display: flex; flex-direction: column; gap: 0.55rem; margin-bottom: 1rem; }
   .check-item { 
     display: flex; 
     align-items: center; 
@@ -212,11 +214,15 @@
   }
   .check-item:hover { border-color: #384d78; background: #1d2840; }
   
+  /* Zaškrtnutý stav: zelený rámeček, šedý text, přeškrtnutá písmena */
   .check-item.done { 
-    background: rgba(16, 185, 129, 0.09); 
+    background: rgba(16, 185, 129, 0.08); 
     border-color: rgba(16, 185, 129, 0.45); 
   }
-  .check-item.done .check-text { color: #94a3b8; }
+  .check-item.done .check-text { 
+    color: #64748b; 
+    text-decoration: line-through; 
+  }
   
   .check-box { 
     width: 22px; 
@@ -238,6 +244,26 @@
     font-weight: 900; 
   }
   .check-text { font-size: 0.88rem; line-height: 1.35; color: var(--text); }
+
+  /* Potvrzovací box po dokončení všech 3 úkolů */
+  .all-done-banner {
+    display: none;
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid var(--accent);
+    border-radius: 12px;
+    padding: 0.85rem 1rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.85rem;
+    color: #a7f3d0;
+    line-height: 1.45;
+    text-align: left;
+    animation: fadeIn 0.3s ease;
+  }
+  .all-done-banner strong { color: #fff; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 
   /* Tlačítko Fáze 2 */
   .toggle-science { 
@@ -267,7 +293,7 @@
   .detail-body ul { padding-left: 1.1rem; margin-top: 0.4rem; }
   .detail-body li { margin-bottom: 0.35rem; }
 
-  /* Signální barvy pro varovné mechanismy */
+  /* Signální varování */
   .alert-text { color: var(--alert); font-weight: 600; }
   .alert-tag { background: var(--alert-dim); color: var(--alert); padding: 0.15rem 0.45rem; border-radius: 4px; font-weight: 600; font-size: 0.82rem; }
   .safe-text { color: var(--accent); font-weight: 600; }
@@ -282,7 +308,7 @@
 <div class="wrapper">
   
   <div class="main-box">
-    <span class="status-pill">Dopaminový impuls zachycen</span>
+    <span class="status-pill" id="badge-pill">Dopaminový impuls zachycen</span>
     
     <h1>
       Tohle není selhání.
@@ -310,18 +336,24 @@
 
     <!-- Evidence-Based KBT & DBT akční kroky -->
     <div class="checklist">
-      <div class="check-item" onclick="this.classList.toggle('done')">
+      <div class="check-item" onclick="toggleTask(this)">
         <div class="check-box">✓</div>
         <div class="check-text"><strong>1. Opusť místnost (KBT):</strong> Vstaň a jdi na světlo / do obýváku (pryč z postele a soukromí).</div>
       </div>
-      <div class="check-item" onclick="this.classList.toggle('done')">
+      <div class="check-item" onclick="toggleTask(this)">
         <div class="check-box">✓</div>
         <div class="check-text"><strong>2. Chlad na obličej (DBT):</strong> Opláchni si obličej ledovou vodou (potápěčský reflex zpomalí tep).</div>
       </div>
-      <div class="check-item" onclick="this.classList.toggle('done')">
+      <div class="check-item" onclick="toggleTask(this)">
         <div class="check-box">✓</div>
-        <div class="check-text"><strong>3. HALT kontrola:</strong> Jsem Hladový, Naštvaný, Osamělý, nebo jen Unavený?</div>
+        <div class="check-text"><strong>3. HALT kontrola:</strong> Zeptej se těla: Mám Hlad, Zlost, Samotu, nebo Únavu?</div>
       </div>
+    </div>
+
+    <!-- Dynamická hláška po zaškrtnutí všech 3 úkolů -->
+    <div class="all-done-banner" id="all-done">
+      <strong>✓ Fyzický automatismus úspěšně přerušen.</strong><br>
+      Prefrontální kůra převzala řízení. Tělo je v bezpečí, teď už jen v klidu dýchej a nech dojet časovač.
     </div>
 
     <button class="toggle-science" onclick="toggleScience()" id="sci-btn">
@@ -387,6 +419,8 @@
   const label = document.getElementById('breath-label');
   const sciPanel = document.getElementById('sci-panel');
   const sciBtn = document.getElementById('sci-btn');
+  const allDoneBanner = document.getElementById('all-done');
+  const badgePill = document.getElementById('badge-pill');
 
   // 1. Zvukový systém s odemčením při prvním dotyku
   let audioCtx = null;
@@ -413,7 +447,19 @@
     } catch(e) {}
   }
 
-  // 2. Přesný hlavní časovač (10 minut na bázi Date.now)
+  // 2. Interaktivní checklist s kontrolou dokončení
+  function toggleTask(el) {
+    el.classList.toggle('done');
+    const allItems = document.querySelectorAll('.check-item');
+    const doneItems = document.querySelectorAll('.check-item.done');
+    if (allItems.length === doneItems.length) {
+      allDoneBanner.style.display = 'block';
+    } else {
+      allDoneBanner.style.display = 'none';
+    }
+  }
+
+  // 3. Přesný hlavní časovač (10 minut na bázi Date.now) s barevnou gradací
   const totalTime = 600;
   const startTime = Date.now();
   const circumference = 597;
@@ -428,10 +474,23 @@
     const offset = circumference - (elapsed / totalTime) * circumference;
     progressBar.style.strokeDashoffset = Math.max(0, offset);
 
+    // Barevná gradace kruhu: Jantarová (excitace) -> Modrá (rovnováha) -> Smaragdová (klid)
+    if (sec > 360) {
+      progressBar.style.stroke = 'var(--amber)';
+    } else if (sec > 180) {
+      progressBar.style.stroke = 'var(--blue)';
+    } else {
+      progressBar.style.stroke = 'var(--accent)';
+    }
+
     if (sec <= 420 && sec > 180) {
       phaseText.innerHTML = "<strong>Fáze 2/3:</strong> Vrchol dopaminové vlny. Pozoruj tělesné napětí bez reakce.";
     } else if (sec <= 180 && sec > 0) {
       phaseText.innerHTML = "<strong>Fáze 3/3:</strong> Prefrontální kůra přebírá řízení. Nutkání ustupuje.";
+      badgePill.innerText = "Biochemická vlna ustupuje";
+      badgePill.style.color = "var(--accent)";
+      badgePill.style.borderColor = "rgba(16, 185, 129, 0.3)";
+      badgePill.style.background = "var(--accent-dim)";
     }
 
     if (sec <= 0) {
@@ -445,7 +504,7 @@
     }
   }, 250);
 
-  // 3. Kalibrovaný dechový cyklus (12s = 4s nádech | 1s drž | 6s výdech | 1s klid)
+  // 4. Kalibrovaný dechový cyklus (12s = 4s nádech | 1s drž | 6s výdech | 1s klid)
   let breathSec = 0;
   function updateBreath() {
     if (breathSec < 4) {
@@ -473,7 +532,7 @@
   updateBreath();
   const breathTimer = setInterval(updateBreath, 1000);
 
-  // 4. Přepínání karet
+  // 5. Přepínání karet
   function toggleScience() {
     sciPanel.classList.toggle('visible');
     sciBtn.innerText = sciPanel.classList.contains('visible') 
