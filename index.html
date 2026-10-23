@@ -65,7 +65,7 @@
     transition: all 0.5s ease;
   }
   
-  /* Dvouřádkový nadpis */
+  /* 2 řádky nadpisu */
   h1 { 
     font-size: 1.45rem; 
     line-height: 1.35; 
@@ -123,7 +123,7 @@
     transition: stroke-dashoffset 0.5s linear, stroke 1s ease;
   }
 
-  /* Plynulá hardwarová CSS animace dechu (styl xhalr.com) */
+  /* Dokonale plynulý dechový kruh ve stylu xhalr */
   .breath-aura { 
     position: absolute; 
     width: 145px; 
@@ -134,35 +134,30 @@
   }
 
   @keyframes xhalrBreath {
-    /* 0s: Start nádechu */
     0% {
       transform: scale(0.72);
       border: 2px solid #38bdf8;
       box-shadow: 0 0 20px rgba(56, 189, 248, 0.25), inset 0 0 15px rgba(56, 189, 248, 0.15);
       background: radial-gradient(circle, rgba(56, 189, 248, 0.2) 0%, transparent 75%);
     }
-    /* 4s (33.3%): Konec nádechu */
     33.3% {
       transform: scale(1.18);
       border: 2px solid #38bdf8;
       box-shadow: 0 0 35px rgba(56, 189, 248, 0.45), inset 0 0 25px rgba(56, 189, 248, 0.25);
       background: radial-gradient(circle, rgba(56, 189, 248, 0.35) 0%, rgba(56, 189, 248, 0.03) 75%);
     }
-    /* 5s (41.6%): Konec 1s zádrže nahoře (fialový záblesk) */
     41.6% {
       transform: scale(1.18);
       border: 2px solid #818cf8;
       box-shadow: 0 0 40px rgba(129, 140, 248, 0.5), inset 0 0 30px rgba(129, 140, 248, 0.3);
       background: radial-gradient(circle, rgba(129, 140, 248, 0.32) 0%, rgba(129, 140, 248, 0.03) 75%);
     }
-    /* 11s (91.6%): Konec 6s výdechu (smaragdová zeleň pro zklidnění) */
     91.6% {
       transform: scale(0.72);
       border: 2px solid #10b981;
       box-shadow: 0 0 25px rgba(16, 185, 129, 0.4), inset 0 0 15px rgba(16, 185, 129, 0.2);
       background: radial-gradient(circle, rgba(16, 185, 129, 0.28) 0%, rgba(16, 185, 129, 0.02) 75%);
     }
-    /* 12s (100%): Konec 1s klidu dole */
     100% {
       transform: scale(0.72);
       border: 2px solid #38bdf8;
@@ -227,7 +222,6 @@
   }
   .check-item:hover { border-color: #384d78; background: #1d2840; }
   
-  /* Zaškrtnutý stav: zelený rámeček, šedý přeškrtnutý text */
   .check-item.done { 
     background: rgba(16, 185, 129, 0.08); 
     border-color: rgba(16, 185, 129, 0.45); 
@@ -258,7 +252,7 @@
   }
   .check-text { font-size: 0.88rem; line-height: 1.35; color: var(--text); }
 
-  /* Kompaktní potvrzovací banner z Verze 1 */
+  /* Kompaktní potvrzovací banner */
   .all-done-banner {
     display: none;
     background: rgba(16, 185, 129, 0.12);
@@ -363,7 +357,7 @@
       </div>
     </div>
 
-    <!-- Minimalistický banner z Verze 1 -->
+    <!-- Kompaktní banner -->
     <div class="all-done-banner" id="all-done">
       <strong>✓ Reflex přerušen.</strong><br>
       Teď už jen v klidu dýchej a nech vlnu doznít.
@@ -374,7 +368,7 @@
     </button>
   </div>
 
-  <!-- Přirozeně formulované kognitivní karty z Verze 2 -->
+  <!-- Kognitivní fakta -->
   <div class="science-panel" id="sci-panel">
     
     <details>
@@ -428,6 +422,7 @@
   const timerEl = document.getElementById('timer');
   const progressBar = document.getElementById('progress-bar');
   const phaseText = document.getElementById('phase-text');
+  const aura = document.getElementById('aura');
   const label = document.getElementById('breath-label');
   const sciPanel = document.getElementById('sci-panel');
   const sciBtn = document.getElementById('sci-btn');
@@ -478,77 +473,4 @@
 
   const countdown = setInterval(() => {
     const elapsed = Math.floor((Date.now() - startTime) / 1000);
-    const sec = Math.max(0, totalTime - elapsed);
-    
-    let m = Math.floor(sec / 60), s = sec % 60;
-    timerEl.innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
-
-    const offset = circumference - (elapsed / totalTime) * circumference;
-    progressBar.style.strokeDashoffset = Math.max(0, offset);
-
-    // Barevná gradace vnějšího kruhu: Jantarová -> Modrá -> Smaragdová
-    if (sec > 360) {
-      progressBar.style.stroke = 'var(--amber)';
-    } else if (sec > 180) {
-      progressBar.style.stroke = 'var(--blue)';
-    } else {
-      progressBar.style.stroke = 'var(--accent)';
-    }
-
-    if (sec <= 420 && sec > 180) {
-      phaseText.innerHTML = "<strong>Fáze 2/3:</strong> Vrchol dopaminové vlny. Pozoruj tělesné napětí bez reakce.";
-    } else if (sec <= 180 && sec > 0) {
-      phaseText.innerHTML = "<strong>Fáze 3/3:</strong> Prefrontální kůra přebírá řízení. Nutkání ustupuje.";
-      badgePill.innerText = "Biochemická vlna ustupuje";
-      badgePill.style.color = "var(--accent)";
-      badgePill.style.borderColor = "rgba(16, 185, 129, 0.3)";
-      badgePill.style.background = "var(--accent-dim)";
-    }
-
-    if (sec <= 0) {
-      clearInterval(countdown);
-      clearInterval(breathTimer);
-      timerEl.innerText = "HOTOVO";
-      timerEl.style.fontSize = "1.8rem";
-      label.innerText = "Vlna překonána";
-      label.style.color = "var(--accent)";
-      phaseText.innerHTML = "<strong>Zvládl jsi to.</strong> Zvyková dráha byla úspěšně oslabena.";
-      playChime();
-    }
-  }, 250);
-
-  // 4. Synchronizované textové štítky k plynulé CSS animaci (12s cyklus)
-  let breathSec = 0;
-  function updateBreathGuide() {
-    if (breathSec < 4) {
-      const rem = 4 - breathSec;
-      label.innerText = `Nádech nosem · ${rem}s`;
-      label.style.color = '#38bdf8';
-    } else if (breathSec === 4) {
-      label.innerText = 'Drž dech · 1s';
-      label.style.color = '#818cf8';
-    } else if (breathSec < 11) {
-      const rem = 11 - breathSec;
-      label.innerText = `Dlouhý výdech ústy · ${rem}s`;
-      label.style.color = '#10b981';
-    } else {
-      label.innerText = 'Klid · 1s';
-      label.style.color = '#10b981';
-    }
-    breathSec = (breathSec + 1) % 12;
-  }
-
-  updateBreathGuide();
-  const breathTimer = setInterval(updateBreathGuide, 1000);
-
-  // 5. Přepínání karet
-  function toggleScience() {
-    sciPanel.classList.toggle('visible');
-    sciBtn.innerText = sciPanel.classList.contains('visible') 
-      ? 'Skrýt fakta ↑' 
-      : 'Zobrazit fakta: Co se teď děje v mém mozku? ↓';
-  }
-</script>
-
-</body>
-</html>
+    const sec =
