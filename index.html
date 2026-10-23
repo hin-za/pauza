@@ -6,65 +6,270 @@
 <title>Pauza</title>
 <style>
   :root {
-    --bg: #0b0f17;
-    --card: #151c28;
-    --border: #26334d;
-    --text: #f1f5f9;
+    --bg: #090d16;
+    --card: #131b2e;
+    --border: #23314f;
+    --text: #f8fafc;
     --muted: #94a3b8;
     --accent: #10b981;
-    --accent-dim: rgba(16, 185, 129, 0.15);
+    --accent-dim: rgba(16, 185, 129, 0.12);
     --blue: #38bdf8;
+    --blue-dim: rgba(56, 189, 248, 0.15);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-  body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.25rem; }
   
-  .wrapper { max-width: 520px; width: 100%; }
+  body { 
+    background: var(--bg); 
+    color: var(--text); 
+    min-height: 100vh; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    padding: 1.75rem 1.25rem; 
+  }
+  
+  .wrapper { 
+    max-width: 500px; 
+    width: 100%; 
+    margin: auto 0;
+  }
 
-  /* Hlavní záchranná karta (Fáze 1) */
-  .main-box { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 2rem 1.75rem; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+  /* Hlavní karta */
+  .main-box { 
+    background: var(--card); 
+    border: 1px solid var(--border); 
+    border-radius: 20px; 
+    padding: 2rem 1.6rem; 
+    text-align: center; 
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.6); 
+  }
   
-  .status-pill { display: inline-block; background: var(--accent-dim); color: var(--accent); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 0.3rem 0.75rem; border-radius: 99px; margin-bottom: 1rem; border: 1px solid rgba(16, 185, 129, 0.3); }
+  .status-pill { 
+    display: inline-block; 
+    background: var(--accent-dim); 
+    color: var(--accent); 
+    font-size: 0.72rem; 
+    font-weight: 700; 
+    text-transform: uppercase; 
+    letter-spacing: 0.08em; 
+    padding: 0.35rem 0.85rem; 
+    border-radius: 99px; 
+    margin-bottom: 1rem; 
+    border: 1px solid rgba(16, 185, 129, 0.3); 
+  }
   
-  h1 { font-size: 1.45rem; color: #fff; margin-bottom: 0.5rem; font-weight: 700; }
-  .subtitle { font-size: 0.95rem; color: var(--muted); line-height: 1.5; margin-bottom: 1.5rem; }
+  /* Dvouřádkový nadpis bez sirotků */
+  h1 { 
+    font-size: 1.45rem; 
+    line-height: 1.35; 
+    color: #fff; 
+    margin-bottom: 0.65rem; 
+    font-weight: 800; 
+    letter-spacing: -0.01em;
+  }
+  h1 .line-2 {
+    display: block;
+    color: var(--blue);
+    font-weight: 700;
+  }
 
-  /* Kombinovaný dechový kruh a časovač */
-  .visualizer { position: relative; width: 170px; height: 170px; margin: 0 auto 1.25rem auto; display: flex; align-items: center; justify-content: center; }
-  .breath-ring { position: absolute; width: 100%; height: 100%; border-radius: 50%; background: radial-gradient(circle, rgba(16,185,129,0.28) 0%, rgba(16,185,129,0.03) 70%); border: 2px solid var(--accent); transition: transform 4s ease-in-out, border-color 1s; }
-  .breath-ring.inhale { transform: scale(1.18); border-color: var(--blue); transition-duration: 4s; }
-  .breath-ring.exhale { transform: scale(0.82); border-color: var(--accent); transition-duration: 6s; }
-  
-  .center-data { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; }
-  .timer { font-size: 2.3rem; font-weight: 800; font-variant-numeric: tabular-nums; color: #fff; line-height: 1.1; }
-  .breath-guide { font-size: 0.85rem; font-weight: 600; color: var(--accent); margin-top: 0.3rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .subtitle { 
+    font-size: 0.92rem; 
+    color: var(--muted); 
+    line-height: 1.5; 
+    margin-bottom: 1.5rem; 
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 
-  .xhalr-link { display: inline-block; font-size: 0.82rem; color: var(--blue); text-decoration: none; margin-bottom: 1.5rem; opacity: 0.85; }
+  /* Vizuální kruh: SVG progres + Vnitřní dechová aura (žádné přetékání textu) */
+  .visualizer { 
+    position: relative; 
+    width: 210px; 
+    height: 210px; 
+    margin: 0 auto 0.85rem auto; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+  }
+
+  .progress-ring {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+    z-index: 2;
+  }
+
+  .progress-ring__bg {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.06);
+    stroke-width: 5;
+  }
+
+  .progress-ring__bar {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 5;
+    stroke-linecap: round;
+    stroke-dasharray: 597; /* 2 * PI * 95 */
+    stroke-dashoffset: 597;
+    transition: stroke-dashoffset 1s linear, stroke 1s ease;
+  }
+
+  /* Vnitřní dýchající koule */
+  .breath-aura { 
+    position: absolute; 
+    width: 155px; 
+    height: 155px; 
+    border-radius: 50%; 
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, rgba(56, 189, 248, 0.02) 75%);
+    border: 1.5px solid rgba(56, 189, 248, 0.4);
+    transform: scale(0.78);
+    transition: transform 4s ease-in-out, background 1s ease, border-color 1s ease; 
+    z-index: 1;
+  }
+  
+  .breath-aura.inhale { 
+    transform: scale(1.16); 
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.3) 0%, rgba(56, 189, 248, 0.02) 75%);
+    border-color: rgba(56, 189, 248, 0.65);
+    transition-duration: 4s; 
+  }
+  
+  .breath-aura.exhale { 
+    transform: scale(0.76); 
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.28) 0%, rgba(16, 185, 129, 0.02) 75%);
+    border-color: rgba(16, 185, 129, 0.55);
+    transition-duration: 6s; 
+  }
+  
+  .center-data { 
+    position: relative; 
+    z-index: 3; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center;
+    width: 160px;
+  }
+  
+  .timer { 
+    font-size: 2.5rem; 
+    font-weight: 800; 
+    font-variant-numeric: tabular-nums; 
+    color: #fff; 
+    line-height: 1.05; 
+    letter-spacing: -0.02em;
+  }
+  
+  .breath-guide { 
+    font-size: 0.78rem; 
+    font-weight: 700; 
+    color: var(--blue); 
+    margin-top: 0.45rem; 
+    text-transform: uppercase; 
+    letter-spacing: 0.06em;
+    background: rgba(15, 23, 42, 0.75);
+    padding: 0.22rem 0.6rem;
+    border-radius: 99px;
+    white-space: nowrap;
+  }
+
+  /* Dynamická neuro-fáze pod kruhem */
+  .phase-status {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 0.9rem;
+    min-height: 1.2em;
+  }
+  .phase-status strong { color: var(--text); }
+
+  .xhalr-link { 
+    display: inline-block; 
+    font-size: 0.8rem; 
+    color: var(--blue); 
+    text-decoration: none; 
+    margin-bottom: 1.4rem; 
+    opacity: 0.85; 
+  }
   .xhalr-link:hover { opacity: 1; text-decoration: underline; }
 
-  /* Interaktivní akční kroky (Zaměstnání rukou a pozornosti) */
-  .checklist { text-align: left; display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.25rem; }
-  .check-item { display: flex; align-items: center; gap: 0.85rem; background: #1c2536; border: 1px solid var(--border); padding: 0.85rem 1rem; border-radius: 10px; cursor: pointer; transition: all 0.2s; user-select: none; }
-  .check-item:hover { border-color: #3b4d71; }
-  .check-item.done { background: rgba(16, 185, 129, 0.08); border-color: var(--accent); color: var(--muted); text-decoration: line-through; }
-  .check-box { width: 20px; height: 20px; border-radius: 6px; border: 2px solid var(--muted); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.8rem; color: transparent; transition: all 0.2s; }
-  .check-item.done .check-box { background: var(--accent); border-color: var(--accent); color: #000; font-weight: bold; }
-  .check-text { font-size: 0.92rem; line-height: 1.35; }
+  /* Checklist */
+  .checklist { text-align: left; display: flex; flex-direction: column; gap: 0.55rem; margin-bottom: 1.25rem; }
+  .check-item { 
+    display: flex; 
+    align-items: center; 
+    gap: 0.85rem; 
+    background: #192338; 
+    border: 1px solid var(--border); 
+    padding: 0.8rem 1rem; 
+    border-radius: 12px; 
+    cursor: pointer; 
+    transition: all 0.2s ease; 
+    user-select: none; 
+  }
+  .check-item:hover { border-color: #384d78; background: #1d2840; }
+  
+  /* Po odškrtnutí zůstane text čitelný, jen jemně zezelená */
+  .check-item.done { 
+    background: rgba(16, 185, 129, 0.09); 
+    border-color: rgba(16, 185, 129, 0.45); 
+  }
+  .check-item.done .check-text {
+    color: #94a3b8;
+  }
+  
+  .check-box { 
+    width: 22px; 
+    height: 22px; 
+    border-radius: 6px; 
+    border: 2px solid #475569; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    flex-shrink: 0; 
+    font-size: 0.8rem; 
+    color: transparent; 
+    transition: all 0.2s ease; 
+  }
+  .check-item.done .check-box { 
+    background: var(--accent); 
+    border-color: var(--accent); 
+    color: #090d16; 
+    font-weight: 900; 
+  }
+  .check-text { font-size: 0.9rem; line-height: 1.35; color: var(--text); transition: color 0.2s; }
 
-  /* Tlačítko pro otevření Fáze 2 */
-  .toggle-science { background: transparent; border: 1px solid var(--border); color: var(--muted); width: 100%; padding: 0.75rem; border-radius: 10px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-  .toggle-science:hover { color: #fff; border-color: var(--muted); background: rgba(255,255,255,0.03); }
+  /* Tlačítko Fáze 2 */
+  .toggle-science { 
+    background: rgba(255,255,255,0.02); 
+    border: 1px solid var(--border); 
+    color: var(--muted); 
+    width: 100%; 
+    padding: 0.8rem; 
+    border-radius: 12px; 
+    font-size: 0.85rem; 
+    font-weight: 600; 
+    cursor: pointer; 
+    transition: all 0.2s; 
+  }
+  .toggle-science:hover { color: #fff; border-color: #3b4d71; background: rgba(255,255,255,0.05); }
 
-  /* Fáze 2: Skrytá vědecká fakta (načtou se až na vyžádání) */
+  /* Fáze 2: Fakta */
   .science-panel { display: none; margin-top: 1rem; text-align: left; }
   .science-panel.visible { display: block; }
   
-  details { background: var(--card); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 0.6rem; }
-  summary { padding: 0.9rem 1.1rem; font-size: 0.92rem; font-weight: 600; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; color: #e2e8f0; }
+  details { background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 0.6rem; }
+  summary { padding: 0.95rem 1.15rem; font-size: 0.9rem; font-weight: 600; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; color: #e2e8f0; }
   summary::-webkit-details-marker { display: none; }
-  summary::after { content: "+"; color: var(--accent); font-size: 1.2rem; }
+  summary::after { content: "+"; color: var(--accent); font-size: 1.2rem; font-weight: bold; }
   details[open] summary::after { content: "−"; }
-  .detail-body { padding: 0 1.1rem 1rem 1.1rem; font-size: 0.88rem; color: var(--muted); line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.04); padding-top: 0.75rem; }
+  .detail-body { padding: 0 1.15rem 1.05rem 1.15rem; font-size: 0.86rem; color: var(--muted); line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.75rem; }
   .detail-body strong { color: #e2e8f0; }
   .detail-body ul { padding-left: 1.1rem; margin-top: 0.4rem; }
   .detail-body li { margin-bottom: 0.3rem; }
@@ -74,26 +279,37 @@
 
 <div class="wrapper">
   
-  <!-- FÁZE 1: OKAMŽITÁ ZÁCHRANNÁ BRZDA -->
   <div class="main-box">
     <span class="status-pill">Dopaminový impuls zachycen</span>
-    <h1>Tohle není selhání. Je to jen biochemická vlna.</h1>
-    <p class="subtitle">Mozek teď nežádá sex, ale rychlou anestezii proti únavě, nudě nebo stresu. Vlna sama opadne do 10 minut.</p>
+    
+    <h1>
+      Tohle není selhání.
+      <span class="line-2">Je to jen biochemická vlna.</span>
+    </h1>
+    
+    <p class="subtitle">Mozek teď nežádá sex, ale rychlou anestezii proti únavě, nudě nebo stresu. Sleduj kruh a dej tělu 10 minut.</p>
 
-    <!-- Spojený časovač a dechový průvodce (4s nádech / 6s výdech) -->
+    <!-- Kombinovaný SVG ukazatel postupu + vnitřní dechová aura -->
     <div class="visualizer">
-      <div class="breath-ring" id="ring"></div>
+      <svg class="progress-ring" viewBox="0 0 210 210">
+        <circle class="progress-ring__bg" cx="105" cy="105" r="95"></circle>
+        <circle class="progress-ring__bar" id="progress-bar" cx="105" cy="105" r="95"></circle>
+      </svg>
+      <div class="breath-aura" id="aura"></div>
       <div class="center-data">
         <div class="timer" id="timer">10:00</div>
-        <div class="breath-guide" id="breath-label">Výdech...</div>
+        <div class="breath-guide" id="breath-label">Nádech nosem · 4s</div>
       </div>
+    </div>
+
+    <div class="phase-status" id="phase-text">
+      <strong>Fáze 1/3:</strong> Zpomalujeme srdeční tep a tlumíme alarm v amygdale.
     </div>
 
     <a href="https://xhalr.com/" target="_blank" class="xhalr-link">
       Otevřít celoobrazovkový dech (xhalr.com) ↗
     </a>
 
-    <!-- Interaktivní checklist: Zapojí motoriku a přeruší automatismus -->
     <div class="checklist">
       <div class="check-item" onclick="this.classList.toggle('done')">
         <div class="check-box">✓</div>
@@ -114,7 +330,6 @@
     </button>
   </div>
 
-  <!-- FÁZE 2: KOGNITIVNÍ FAKTA (Rozbalí se až po kliknutí) -->
   <div class="science-panel" id="sci-panel">
     
     <details>
@@ -149,7 +364,7 @@
         <ul>
           <li>Udělej 20 kliků nebo dřepů do zadýchání.</li>
           <li>Jdi na 5 minut ven na čerstvý vzduch bez telefonu.</li>
-          <li>Pusť si studenou sprchu na 30 vteřin (okamžitý přirozený nárůst dopaminu a noradrenalinu bez propadu).</li>
+          <li>Pusť si studenou sprchu na 30 vteřin (přirozený nárůst dopaminu bez následného propadu).</li>
         </ul>
       </div>
     </details>
@@ -159,42 +374,93 @@
 </div>
 
 <script>
-  // 1. Odpočet 10 minut
-  let sec = 600;
+  // 1. Audio odemknutí na první interakci
+  let audioCtx = null;
+  function unlockAudio() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    document.removeEventListener('pointerdown', unlockAudio);
+  }
+  document.addEventListener('pointerdown', unlockAudio);
+
+  function playChime() {
+    try {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(528, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.5);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 1.5);
+    } catch(e) {}
+  }
+
+  // 2. Hlavní časovač (600s) + SVG Progress kruh + Dynamická fáze
+  const totalTime = 600;
+  let sec = totalTime;
+  const circumference = 597; // 2 * PI * 95
   const timerEl = document.getElementById('timer');
+  const progressBar = document.getElementById('progress-bar');
+  const phaseText = document.getElementById('phase-text');
+
   const countdown = setInterval(() => {
     sec--;
     let m = Math.floor(sec / 60), s = sec % 60;
     timerEl.innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+
+    // Posun SVG kruhu
+    const offset = circumference - ((totalTime - sec) / totalTime) * circumference;
+    progressBar.style.strokeDashoffset = offset;
+
+    // Psychofyziologické fáze během 10 minut
+    if (sec === 420) {
+      phaseText.innerHTML = "<strong>Fáze 2/3:</strong> Vrchol dopaminové vlny. Pozoruj pnutí v těle bez akce.";
+    } else if (sec === 180) {
+      phaseText.innerHTML = "<strong>Fáze 3/3:</strong> Prefrontální kůra přebírá řízení. Vlna začíná ustupovat.";
+    }
+
     if (sec <= 0) {
       clearInterval(countdown);
-      timerEl.innerText = "VLNA OPADLA";
-      timerEl.style.fontSize = "1.4rem";
+      clearInterval(breathTimer);
+      timerEl.innerText = "HOTOVO";
+      timerEl.style.fontSize = "1.8rem";
+      label.innerText = "Vlna překonána";
+      phaseText.innerHTML = "<strong>Dokázal jsi to.</strong> Nervové spojení sebekontroly je opět silnější.";
       playChime();
     }
   }, 1000);
 
-  // 2. Fyziologický dechový rytmus: 4s nádech, 6s výdech (aktivace parasympatiku)
-  const ring = document.getElementById('ring');
+  // 3. Rezonanční dech 4s Nádech / 6s Výdech s živým odpočtem vteřin
+  const aura = document.getElementById('aura');
   const label = document.getElementById('breath-label');
-  
-  function breathCycle() {
-    // Nádech (4 vteřiny)
-    ring.className = 'breath-ring inhale';
-    label.innerText = 'Nádech (4s)';
-    label.style.color = '#38bdf8';
-    
-    setTimeout(() => {
-      // Výdech (6 vteřin - delší výdech zpomaluje tep)
-      ring.className = 'breath-ring exhale';
-      label.innerText = 'Dlouhý výdech (6s)';
-      label.style.color = '#10b981';
-    }, 4000);
-  }
-  breathCycle();
-  setInterval(breathCycle, 10000);
+  let cycleSec = 0; // 0..9 (0-3 = nádech 4s, 4-9 = výdech 6s)
 
-  // 3. Přepínání Fáze 2 (Vědecká fakta)
+  function updateBreath() {
+    if (cycleSec < 4) {
+      // Fáze nádechu (4s)
+      if (cycleSec === 0) aura.className = 'breath-aura inhale';
+      const rem = 4 - cycleSec;
+      label.innerText = `Nádech nosem · ${rem}s`;
+      label.style.color = '#38bdf8';
+    } else {
+      // Fáze výdechu (6s)
+      if (cycleSec === 4) aura.className = 'breath-aura exhale';
+      const rem = 10 - cycleSec;
+      label.innerText = `Dlouhý výdech · ${rem}s`;
+      label.style.color = '#10b981';
+    }
+    cycleSec = (cycleSec + 1) % 10;
+  }
+
+  // Okamžitý start po načtení
+  setTimeout(() => { updateBreath(); }, 50);
+  const breathTimer = setInterval(updateBreath, 1000);
+
+  // 4. Přepínání vědeckých faktů
   function toggleScience() {
     const panel = document.getElementById('sci-panel');
     const btn = document.getElementById('sci-btn');
@@ -202,23 +468,6 @@
     btn.innerText = panel.classList.contains('visible') 
       ? 'Skrýt fakta ↑' 
       : 'Zobrazit fakta: Co se teď děje v mém mozku? ↓';
-  }
-
-  // 4. Jemný akustický signál na konci
-  function playChime() {
-    try {
-      const ctx = new (window.AudioContext || window.webkitAudioContext)();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(528, ctx.currentTime);
-      gain.gain.setValueAtTime(0.15, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.5);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start();
-      osc.stop(ctx.currentTime + 1.5);
-    } catch(e) {}
   }
 </script>
 
