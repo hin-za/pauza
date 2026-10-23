@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<title>Pauza</title>
+<style>
+  body { font-family: -apple-system, sans-serif; background: #121212; color: #e0e0e0; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; text-align: center; }
+  .box { max-width: 480px; padding: 2rem; border: 1px solid #333; border-radius: 8px; background: #1e1e1e; }
+  h1 { color: #fff; font-size: 1.5rem; margin-bottom: 1rem; }
+  p { line-height: 1.6; font-size: 1.1rem; color: #aaa; }
+  .timer { font-size: 2.5rem; font-weight: bold; color: #4caf50; margin: 1.5rem 0; }
+  .steps { text-align: left; margin-top: 1.5rem; font-size: 0.95rem; line-height: 1.8; }
+</style>
+</head>
+<body>
+<div class="box">
+  <h1>Neurochemická vlna</h1>
+  <p>Tento impulz dosáhne vrcholu a sám odezní za 10 minut. Mozek teď žádá dopamin ze zvyku, ne z nutnosti.</p>
+  <div class="timer" id="time">10:00</div>
+  <div class="steps">
+    1. Polož telefon / odejdi od počítače.<br>
+    2. Vypij sklenici studené vody.<br>
+    3. Udělej 10 hlubokých výdechů (výdech delší než nádech).
+  </div>
+</div>
+<script>
+  let sec = 600;
+  const el = document.getElementById('time');
+  const t = setInterval(() => {
+    sec--;
+    let m = Math.floor(sec / 60), s = sec % 60;
+    el.innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+    if (sec <= 0) { clearInterval(t); el.innerText = "Vlna opadla."; }
+  }, 1000);
+</script>
+</body>
+</html>
