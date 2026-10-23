@@ -60,4 +60,167 @@
   .science-panel.visible { display: block; }
   
   details { background: var(--card); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 0.6rem; }
-  summary { padding: 0.9rem 1.1rem; font-size: 0.92rem; font-weight: 600; cursor: pointer; list
+  summary { padding: 0.9rem 1.1rem; font-size: 0.92rem; font-weight: 600; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; color: #e2e8f0; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; color: var(--accent); font-size: 1.2rem; }
+  details[open] summary::after { content: "−"; }
+  .detail-body { padding: 0 1.1rem 1rem 1.1rem; font-size: 0.88rem; color: var(--muted); line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.04); padding-top: 0.75rem; }
+  .detail-body strong { color: #e2e8f0; }
+  .detail-body ul { padding-left: 1.1rem; margin-top: 0.4rem; }
+  .detail-body li { margin-bottom: 0.3rem; }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+  
+  <!-- FÁZE 1: OKAMŽITÁ ZÁCHRANNÁ BRZDA -->
+  <div class="main-box">
+    <span class="status-pill">Dopaminový impuls zachycen</span>
+    <h1>Tohle není selhání. Je to jen biochemická vlna.</h1>
+    <p class="subtitle">Mozek teď nežádá sex, ale rychlou anestezii proti únavě, nudě nebo stresu. Vlna sama opadne do 10 minut.</p>
+
+    <!-- Spojený časovač a dechový průvodce (4s nádech / 6s výdech) -->
+    <div class="visualizer">
+      <div class="breath-ring" id="ring"></div>
+      <div class="center-data">
+        <div class="timer" id="timer">10:00</div>
+        <div class="breath-guide" id="breath-label">Výdech...</div>
+      </div>
+    </div>
+
+    <a href="https://xhalr.com/" target="_blank" class="xhalr-link">
+      Otevřít celoobrazovkový dech (xhalr.com) ↗
+    </a>
+
+    <!-- Interaktivní checklist: Zapojí motoriku a přeruší automatismus -->
+    <div class="checklist">
+      <div class="check-item" onclick="this.classList.toggle('done')">
+        <div class="check-box">✓</div>
+        <div class="check-text"><strong>1. Změň polohu:</strong> Vstaň ze židle / sedni si na posteli.</div>
+      </div>
+      <div class="check-item" onclick="this.classList.toggle('done')">
+        <div class="check-box">✓</div>
+        <div class="check-text"><strong>2. Chladový šok:</strong> Jdi vypít sklenici vody nebo si opláchni obličej.</div>
+      </div>
+      <div class="check-item" onclick="this.classList.toggle('done')">
+        <div class="check-box">✓</div>
+        <div class="check-text"><strong>3. HALT kontrola:</strong> Jsem Hladový, Naštvaný, Osamělý, nebo Unavený?</div>
+      </div>
+    </div>
+
+    <button class="toggle-science" onclick="toggleScience()" id="sci-btn">
+      Zobrazit fakta: Co se teď děje v mém mozku? ↓
+    </button>
+  </div>
+
+  <!-- FÁZE 2: KOGNITIVNÍ FAKTA (Rozbalí se až po kliknutí) -->
+  <div class="science-panel" id="sci-panel">
+    
+    <details>
+      <summary>1. Emoční anestezie (Proč teď mozek křičí)</summary>
+      <div class="detail-body">
+        Většina nutkání nevzniká z přebytku sexuální energie, ale jako únik od nepříjemného pocitu (stres, samota, vyčerpání). Pokud na stres odpovíš pornem, učíš mozek zkratce. Když teď vydržíš 10 minut, doslova posiluješ prefrontální kůru (centrum vůle).
+      </div>
+    </details>
+
+    <details>
+      <summary>2. Mechanický návyk a výkonnostní úzkost</summary>
+      <div class="detail-body">
+        Problémy v posteli nevznikají „zničením mozku“, ale dvěma faktory:
+        <ul>
+          <li><strong>Death Grip:</strong> Ruka vyvíjí tlak a rychlost, kterým žádné reálné tělo nemůže konkurovat.</li>
+          <li><strong>Divácká role (Spectatoring):</strong> Zvyk dívat se na obrazovku vede k tomu, že při reálném sexu hodnotíš sám sebe zvenčí, což vyplaví adrenalin a fyziologicky zablokuje erekci.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary>3. Past studu a mýtus „Dne 0“</summary>
+      <div class="detail-body">
+        <strong>Stud je palivem relapsu:</strong> Stud říká <em>„Jsem slaboch“</em>, což vyvolá emoční bolest, kterou chce mozek opět utlumit pornem. I kdybys uklouzl, tvoje předchozí dny a týdny se nemažou. Nervové dráhy se budují kumulativně, žádný „Den 0“ v biologii neexistuje.
+      </div>
+    </details>
+
+    <details>
+      <summary>4. Kde vybít dopamin hned teď</summary>
+      <div class="detail-body">
+        Nahromaděný neklid nepřemůžeš sezením u obrazovky. Přetav ho do pohybu:
+        <ul>
+          <li>Udělej 20 kliků nebo dřepů do zadýchání.</li>
+          <li>Jdi na 5 minut ven na čerstvý vzduch bez telefonu.</li>
+          <li>Pusť si studenou sprchu na 30 vteřin (okamžitý přirozený nárůst dopaminu a noradrenalinu bez propadu).</li>
+        </ul>
+      </div>
+    </details>
+
+  </div>
+
+</div>
+
+<script>
+  // 1. Odpočet 10 minut
+  let sec = 600;
+  const timerEl = document.getElementById('timer');
+  const countdown = setInterval(() => {
+    sec--;
+    let m = Math.floor(sec / 60), s = sec % 60;
+    timerEl.innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+    if (sec <= 0) {
+      clearInterval(countdown);
+      timerEl.innerText = "VLNA OPADLA";
+      timerEl.style.fontSize = "1.4rem";
+      playChime();
+    }
+  }, 1000);
+
+  // 2. Fyziologický dechový rytmus: 4s nádech, 6s výdech (aktivace parasympatiku)
+  const ring = document.getElementById('ring');
+  const label = document.getElementById('breath-label');
+  
+  function breathCycle() {
+    // Nádech (4 vteřiny)
+    ring.className = 'breath-ring inhale';
+    label.innerText = 'Nádech (4s)';
+    label.style.color = '#38bdf8';
+    
+    setTimeout(() => {
+      // Výdech (6 vteřin - delší výdech zpomaluje tep)
+      ring.className = 'breath-ring exhale';
+      label.innerText = 'Dlouhý výdech (6s)';
+      label.style.color = '#10b981';
+    }, 4000);
+  }
+  breathCycle();
+  setInterval(breathCycle, 10000);
+
+  // 3. Přepínání Fáze 2 (Vědecká fakta)
+  function toggleScience() {
+    const panel = document.getElementById('sci-panel');
+    const btn = document.getElementById('sci-btn');
+    panel.classList.toggle('visible');
+    btn.innerText = panel.classList.contains('visible') 
+      ? 'Skrýt fakta ↑' 
+      : 'Zobrazit fakta: Co se teď děje v mém mozku? ↓';
+  }
+
+  // 4. Jemný akustický signál na konci
+  function playChime() {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(528, ctx.currentTime);
+      gain.gain.setValueAtTime(0.15, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.5);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 1.5);
+    } catch(e) {}
+  }
+</script>
+
+</body>
+</html>
