@@ -136,57 +136,12 @@
       height: 146px;
       border-radius: 50%;
       z-index: 1;
-      border: 1.4px solid rgba(142, 216, 255, 0.85);
-      background: radial-gradient(circle, rgba(142, 216, 255, 0.16) 0%, rgba(142, 216, 255, 0.04) 72%, transparent 100%);
-      box-shadow: 0 0 18px rgba(142, 216, 255, 0.16), inset 0 0 16px rgba(142, 216, 255, 0.1);
-      animation: breathCycle 12s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-      will-change: transform, box-shadow, background, border-color, opacity;
-    }
-
-    @keyframes breathCycle {
-      0%, 100% {
-        transform: scale(0.82);
-        opacity: 0.72;
-        border-color: rgba(142, 216, 255, 0.88);
-        box-shadow: 0 0 18px rgba(142, 216, 255, 0.20), inset 0 0 16px rgba(142, 216, 255, 0.12);
-        background: radial-gradient(circle, rgba(142, 216, 255, 0.16) 0%, rgba(142, 216, 255, 0.04) 72%, transparent 100%);
-      }
-      20% {
-        transform: scale(0.94);
-        opacity: 0.88;
-      }
-      35% {
-        transform: scale(1.08);
-        opacity: 1;
-        border-color: rgba(142, 216, 255, 0.96);
-        box-shadow: 0 0 28px rgba(142, 216, 255, 0.25), inset 0 0 20px rgba(142, 216, 255, 0.12);
-        background: radial-gradient(circle, rgba(142, 216, 255, 0.22) 0%, rgba(142, 216, 255, 0.05) 72%, transparent 100%);
-      }
-      48% {
-        transform: scale(1.12);
-        opacity: 1;
-        border-color: rgba(165, 180, 252, 0.9);
-        box-shadow: 0 0 32px rgba(165, 180, 252, 0.20), inset 0 0 22px rgba(165, 180, 252, 0.12);
-        background: radial-gradient(circle, rgba(165, 180, 252, 0.18) 0%, rgba(165, 180, 252, 0.04) 72%, transparent 100%);
-      }
-      58% {
-        transform: scale(0.92);
-        opacity: 0.9;
-        border-color: rgba(127, 231, 197, 0.9);
-        box-shadow: 0 0 22px rgba(127, 231, 197, 0.20), inset 0 0 16px rgba(127, 231, 197, 0.10);
-        background: radial-gradient(circle, rgba(127, 231, 197, 0.12) 0%, rgba(127, 231, 197, 0.025) 72%, transparent 100%);
-      }
-      75% {
-        transform: scale(0.82);
-        opacity: 0.8;
-        border-color: rgba(127, 231, 197, 0.9);
-        box-shadow: 0 0 18px rgba(127, 231, 197, 0.18), inset 0 0 12px rgba(127, 231, 197, 0.09);
-        background: radial-gradient(circle, rgba(127, 231, 197, 0.10) 0%, rgba(127, 231, 197, 0.02) 72%, transparent 100%);
-      }
-      88% {
-        transform: scale(0.79);
-        opacity: 0.74;
-      }
+      border: 1.4px solid rgba(142, 216, 255, 0.9);
+      background: radial-gradient(circle, rgba(142, 216, 255, 0.18) 0%, rgba(142, 216, 255, 0.05) 72%, transparent 100%);
+      box-shadow: 0 0 18px rgba(142, 216, 255, 0.2), inset 0 0 16px rgba(142, 216, 255, 0.12);
+      transform-origin: center center;
+      will-change: transform, box-shadow, opacity, background, border-color;
+      transition: transform 0.14s linear, box-shadow 0.14s linear, opacity 0.14s linear, background 0.14s linear, border-color 0.14s linear;
     }
 
     .center {
@@ -500,6 +455,7 @@
     const guideEl = document.getElementById('breath-label');
     const phaseEl = document.getElementById('phase-text');
     const barEl = document.getElementById('progress-bar');
+    const auraEl = document.getElementById('aura');
     const totalSeconds = 600;
     let remaining = totalSeconds;
     let phaseIndex = 0;
@@ -510,6 +466,10 @@
       const mins = Math.floor(seconds / 60);
       const secs = seconds % 60;
       return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    function easeInOutSine(value) {
+      return -(Math.cos(Math.PI * value) - 1) / 2;
     }
 
     function updatePhase() {
@@ -551,9 +511,49 @@
       }
     }
 
+    function updateBreath(now) {
+      const cycleSeconds = 11;
+      const breathTime = ((now / 1000) % cycleSeconds);
+
+      let scale = 0.82;
+      let opacity = 0.72;
+      let glow = 0.14;
+      let borderAlpha = 0.78;
+
+      if (breathTime < 4) {
+        const t = breathTime / 4;
+        const eased = easeInOutSine(t);
+        scale = 0.82 + (eased * 0.42);
+        opacity = 0.7 + (eased * 0.3);
+        glow = 0.12 + (eased * 0.18);
+        borderAlpha = 0.7 + (eased * 0.25);
+      } else if (breathTime < 5) {
+        scale = 1.22;
+        opacity = 1;
+        glow = 0.30;
+        borderAlpha = 0.96;
+      } else {
+        const t = (breathTime - 5) / 6;
+        const eased = easeInOutSine(t);
+        scale = 1.22 - (eased * 0.42);
+        opacity = 1 - (eased * 0.28);
+        glow = 0.30 - (eased * 0.18);
+        borderAlpha = 0.96 - (eased * 0.24);
+      }
+
+      auraEl.style.transform = `scale(${scale})`;
+      auraEl.style.opacity = opacity.toFixed(3);
+      auraEl.style.borderColor = `rgba(142, 216, 255, ${borderAlpha.toFixed(3)})`;
+      auraEl.style.boxShadow = `0 0 ${18 + (glow * 30)}px rgba(142, 216, 255, ${(0.18 + glow * 0.55).toFixed(3)}), inset 0 0 ${18 + (glow * 12)}px rgba(142, 216, 255, ${(0.12 + glow * 0.45).toFixed(3)})`;
+      auraEl.style.background = `radial-gradient(circle, rgba(142, 216, 255, ${(0.13 + glow * 0.24).toFixed(3)}) 0%, rgba(142, 216, 255, ${(0.04 + glow * 0.11).toFixed(3)}) 72%, transparent 100%)`;
+
+      requestAnimationFrame(updateBreath);
+    }
+
     setProgress(0);
     updatePhase();
     setInterval(tick, 1000);
+    requestAnimationFrame(updateBreath);
 
     function toggleTask(el) {
       el.classList.toggle('done');
