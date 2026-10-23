@@ -446,9 +446,9 @@
 
   <script>
     const VISUAL_PHASES = [
-      { label: 'Nádech, 4s', text: 'Fáze 1/3: Zpomaluje se srdeční tep a tělo přejde do klidnějšího režimu.' },
-      { label: 'Zadržení, 1s', text: 'Fáze 2/3: Tělo se stabilizuje a mozek přechází z pohotovosti do klidu.' },
-      { label: 'Výdech, 6s', text: 'Fáze 3/3: Svaly se uvolňují, stres klesá a mysl se vrací do rovnováhy.' }
+      { title: 'Fáze 1/3', text: 'Zpomaluje se srdeční tep a tělo přejde do klidnějšího režimu.' },
+      { title: 'Fáze 2/3', text: 'Tělo se stabilizuje a mozek přechází z pohotovosti do klidu.' },
+      { title: 'Fáze 3/3', text: 'Svaly se uvolňují, stres klesá a mysl se vrací do rovnováhy.' }
     ];
 
     const timerEl = document.getElementById('timer');
@@ -459,8 +459,7 @@
     const totalSeconds = 600;
     let remaining = totalSeconds;
     let phaseIndex = 0;
-    let phaseTimer = 0;
-    const phaseDurations = [4, 1, 6];
+    const phaseThresholds = [240, 480];
 
     function formatTime(seconds) {
       const mins = Math.floor(seconds / 60);
@@ -472,10 +471,15 @@
       return -(Math.cos(Math.PI * value) - 1) / 2;
     }
 
+    function getPhaseIndexForElapsed(elapsed) {
+      if (elapsed < phaseThresholds[0]) return 0;
+      if (elapsed < phaseThresholds[1]) return 1;
+      return 2;
+    }
+
     function updatePhase() {
       const active = VISUAL_PHASES[phaseIndex];
-      guideEl.textContent = active.label;
-      phaseEl.innerHTML = `<strong>Fáze ${phaseIndex + 1}/${VISUAL_PHASES.length}:</strong> ${active.text.replace(/^Fáze \d+\/\d+:\s*/, '')}`;
+      phaseEl.innerHTML = `<strong>${active.title}:</strong> ${active.text}`;
     }
 
     function setProgress(value) {
@@ -484,6 +488,16 @@
       const offset = circumference * (1 - value);
       barEl.style.strokeDasharray = `${circumference}`;
       barEl.style.strokeDashoffset = `${offset}`;
+    }
+
+    function getBreathGuideLabel(nowMs) {
+      const cycleSeconds = 11;
+      const breathTime = ((nowMs / 1000) % cycleSeconds);
+
+      if (breathTime < 4) return 'Nádech, 4s';
+      if (breathTime < 5) return 'Zadržení, 1s';
+      if (breathTime < 11) return 'Výdech, 6s';
+      return 'Nádech, 4s';
     }
 
     function tick() {
@@ -502,11 +516,10 @@
       const progress = 1 - (remaining / totalSeconds);
       setProgress(progress);
 
-      phaseTimer += 1;
-      const currentPhase = phaseDurations[phaseIndex];
-      if (phaseTimer >= currentPhase) {
-        phaseIndex = (phaseIndex + 1) % VISUAL_PHASES.length;
-        phaseTimer = 0;
+      const elapsed = totalSeconds - remaining;
+      const nextPhaseIndex = getPhaseIndexForElapsed(elapsed);
+      if (nextPhaseIndex !== phaseIndex) {
+        phaseIndex = nextPhaseIndex;
         updatePhase();
       }
     }
@@ -514,6 +527,7 @@
     function updateBreath(now) {
       const cycleSeconds = 11;
       const breathTime = ((now / 1000) % cycleSeconds);
+      guideEl.textContent = getBreathGuideLabel(now);
 
       let scale = 0.82;
       let opacity = 0.72;
