@@ -140,39 +140,52 @@
       background: radial-gradient(circle, rgba(142, 216, 255, 0.16) 0%, rgba(142, 216, 255, 0.04) 72%, transparent 100%);
       box-shadow: 0 0 18px rgba(142, 216, 255, 0.16), inset 0 0 16px rgba(142, 216, 255, 0.1);
       animation: breathCycle 12s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-      will-change: transform, box-shadow, background, border-color;
+      will-change: transform, box-shadow, background, border-color, opacity;
     }
 
     @keyframes breathCycle {
       0%, 100% {
         transform: scale(0.82);
+        opacity: 0.72;
         border-color: rgba(142, 216, 255, 0.88);
         box-shadow: 0 0 18px rgba(142, 216, 255, 0.20), inset 0 0 16px rgba(142, 216, 255, 0.12);
         background: radial-gradient(circle, rgba(142, 216, 255, 0.16) 0%, rgba(142, 216, 255, 0.04) 72%, transparent 100%);
       }
-      25% {
-        transform: scale(1.02);
+      20% {
+        transform: scale(0.94);
+        opacity: 0.88;
+      }
+      35% {
+        transform: scale(1.08);
+        opacity: 1;
         border-color: rgba(142, 216, 255, 0.96);
         box-shadow: 0 0 28px rgba(142, 216, 255, 0.25), inset 0 0 20px rgba(142, 216, 255, 0.12);
-        background: radial-gradient(circle, rgba(142, 216, 255, 0.2) 0%, rgba(142, 216, 255, 0.05) 72%, transparent 100%);
+        background: radial-gradient(circle, rgba(142, 216, 255, 0.22) 0%, rgba(142, 216, 255, 0.05) 72%, transparent 100%);
       }
-      33% {
-        transform: scale(1.06);
+      48% {
+        transform: scale(1.12);
+        opacity: 1;
         border-color: rgba(165, 180, 252, 0.9);
         box-shadow: 0 0 32px rgba(165, 180, 252, 0.20), inset 0 0 22px rgba(165, 180, 252, 0.12);
         background: radial-gradient(circle, rgba(165, 180, 252, 0.18) 0%, rgba(165, 180, 252, 0.04) 72%, transparent 100%);
       }
       58% {
-        transform: scale(0.9);
+        transform: scale(0.92);
+        opacity: 0.9;
         border-color: rgba(127, 231, 197, 0.9);
         box-shadow: 0 0 22px rgba(127, 231, 197, 0.20), inset 0 0 16px rgba(127, 231, 197, 0.10);
         background: radial-gradient(circle, rgba(127, 231, 197, 0.12) 0%, rgba(127, 231, 197, 0.025) 72%, transparent 100%);
       }
       75% {
         transform: scale(0.82);
+        opacity: 0.8;
         border-color: rgba(127, 231, 197, 0.9);
         box-shadow: 0 0 18px rgba(127, 231, 197, 0.18), inset 0 0 12px rgba(127, 231, 197, 0.09);
         background: radial-gradient(circle, rgba(127, 231, 197, 0.10) 0%, rgba(127, 231, 197, 0.02) 72%, transparent 100%);
+      }
+      88% {
+        transform: scale(0.79);
+        opacity: 0.74;
       }
     }
 
@@ -199,527 +212,366 @@
       margin-top: 0.38rem;
       padding: 0.24rem 0.7rem;
       border-radius: 999px;
+      background: rgba(15, 23, 42, 0.88);
       border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(8, 17, 27, 0.7);
       color: var(--accent);
-      font-size: 0.72rem;
-      font-weight: 700;
+      font-size: 0.74rem;
       letter-spacing: 0.08em;
+      font-weight: 700;
       text-transform: uppercase;
       white-space: nowrap;
-      transition: color 0.35s ease, border-color 0.35s ease;
     }
 
-    .phase {
+    .phase-status {
       color: var(--muted);
-      font-size: 0.82rem;
-      line-height: 1.5;
-      min-height: 1.3em;
-      margin-bottom: 1.2rem;
+      font-size: 0.88rem;
+      line-height: 1.55;
+      text-align: center;
+      margin-top: 0.8rem;
     }
 
-    .phase strong { color: var(--text); }
+    .phase-status strong { color: var(--text); }
 
-    .steps {
+    .checklist {
+      margin-top: 1.3rem;
       display: flex;
       flex-direction: column;
-      gap: 0.6rem;
-      text-align: left;
-      margin-bottom: 1rem;
+      gap: 0.7rem;
     }
 
-    .step {
+    .check-item {
       display: flex;
       align-items: center;
-      gap: 0.85rem;
-      padding: 0.78rem 0.9rem;
-      background: rgba(20, 29, 40, 0.96);
+      gap: 0.8rem;
+      padding: 0.72rem 0.8rem;
+      border-radius: 14px;
+      background: rgba(148, 163, 184, 0.04);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      cursor: pointer;
-      user-select: none;
-      transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+      color: var(--soft);
+      transition: background 0.2s ease, border-color 0.2s ease;
     }
 
-    .step:hover {
-      border-color: rgba(148, 163, 184, 0.3);
-      background: rgba(27, 37, 51, 0.98);
-      transform: translateY(-1px);
+    .check-item:hover {
+      background: rgba(148, 163, 184, 0.08);
+      border-color: rgba(142, 216, 255, 0.3);
     }
 
-    .step.done {
-      background: rgba(127, 231, 197, 0.08);
-      border-color: rgba(127, 231, 197, 0.35);
-    }
-
-    .step.done .text {
-      color: #8aa0b7;
-      text-decoration: line-through;
-    }
-
-    .check {
+    .check-box {
+      flex: 0 0 22px;
       width: 22px;
       height: 22px;
       border-radius: 6px;
-      border: 2px solid rgba(148, 163, 184, 0.7);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      border: 1px solid rgba(148, 163, 184, 0.42);
+      display: grid;
+      place-items: center;
+      font-size: 0.72rem;
+      font-weight: 800;
       color: transparent;
-      font-size: 0.78rem;
-      font-weight: 900;
-      flex-shrink: 0;
+      background: rgba(15, 23, 36, 0.7);
       transition: all 0.2s ease;
     }
 
-    .step.done .check {
-      background: var(--mint);
-      border-color: var(--mint);
+    .check-item.done .check-box {
+      background: var(--accent);
+      border-color: var(--accent);
       color: #07111b;
     }
 
-    .text {
-      font-size: 0.89rem;
-      line-height: 1.4;
-      color: var(--text);
+    .check-item.done .check-text {
+      color: rgba(237, 246, 255, 0.74);
+      text-decoration: line-through;
     }
 
-    .banner {
-      display: none;
-      background: rgba(127, 231, 197, 0.1);
-      border: 1px solid rgba(127, 231, 197, 0.4);
-      border-radius: 12px;
-      padding: 0.8rem 0.9rem;
-      margin-bottom: 1rem;
-      font-size: 0.86rem;
-      color: #c9f8ea;
+    .check-text {
       line-height: 1.45;
-      animation: fadeIn 0.3s ease;
+      font-size: 0.9rem;
     }
 
-    .banner strong { color: #fff; }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-6px); }
-      to { opacity: 1; transform: translateY(0); }
+    .check-text strong {
+      color: var(--text);
+      font-weight: 700;
     }
 
-    .toggle {
-      width: 100%;
-      padding: 0.8rem 1rem;
+    .all-done-banner {
+      display: none;
+      margin-top: 1.1rem;
+      padding: 0.8rem 0.9rem;
       border-radius: 12px;
-      background: rgba(255,255,255,0.015);
+      background: rgba(127, 231, 197, 0.08);
+      border: 1px solid rgba(127, 231, 197, 0.28);
+      color: var(--mint);
+      text-align: center;
+      line-height: 1.5;
+      font-size: 0.9rem;
+    }
+
+    .all-done-banner.visible {
+      display: block;
+    }
+
+    .toggle-science {
+      margin-top: 1rem;
+      background: rgba(255,255,255,0.02);
       border: 1px solid var(--border);
       color: var(--muted);
-      font-size: 0.85rem;
-      font-weight: 700;
+      width: 100%;
+      padding: 0.8rem 0.9rem;
+      border-radius: 12px;
       cursor: pointer;
+      font-size: 0.88rem;
+      font-weight: 700;
       transition: all 0.2s ease;
     }
 
-    .toggle:hover {
-      background: rgba(255,255,255,0.03);
-      border-color: rgba(148,163,184,0.28);
-      color: #fff;
+    .toggle-science:hover {
+      color: var(--text);
+      border-color: rgba(142, 216, 255, 0.3);
+      background: rgba(255,255,255,0.04);
     }
 
-    .facts {
+    .science-panel {
       display: none;
-      margin-top: 1rem;
+      margin-top: 0.9rem;
       text-align: left;
     }
 
-    .facts.visible { display: block; }
+    .science-panel.visible {
+      display: block;
+    }
 
     details {
-      background: rgba(17, 25, 37, 0.85);
+      background: rgba(15, 23, 36, 0.9);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      margin-bottom: 0.6rem;
-      overflow: hidden;
+      border-radius: 14px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 0.75rem;
     }
 
     summary {
-      list-style: none;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.9rem 1rem;
-      font-size: 0.88rem;
-      font-weight: 600;
+      list-style: none;
       color: var(--soft);
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.7rem;
     }
 
     summary::-webkit-details-marker { display: none; }
+
     summary::after {
       content: "+";
-      font-size: 1.2rem;
-      line-height: 1;
       color: var(--accent);
-      font-weight: 700;
-    }
-    details[open] summary::after { content: "−"; }
-
-    .body {
-      padding: 0 1rem 1rem;
-      border-top: 1px solid rgba(255,255,255,0.05);
-      color: #d8e7f9;
-      font-size: 0.88rem;
-      line-height: 1.6;
+      font-size: 1.1rem;
+      font-weight: 800;
     }
 
-    .body ul { padding-left: 1.1rem; margin-top: 0.35rem; }
-    .body li { margin-bottom: 0.38rem; }
+    details[open] summary::after {
+      content: "−";
+    }
 
-    .alert { color: var(--alert); font-weight: 700; }
-    .safe { color: var(--mint); font-weight: 700; }
-    .tag {
-      display: inline-block;
-      padding: 0.15rem 0.45rem;
-      border-radius: 5px;
-      background: var(--alert-soft);
+    .detail-body {
+      padding-top: 0.8rem;
+      color: var(--muted);
+      font-size: 0.87rem;
+      line-height: 1.7;
+    }
+
+    .detail-body ul {
+      padding-left: 1.1rem;
+      margin-top: 0.35rem;
+    }
+
+    .detail-body li {
+      margin-bottom: 0.35rem;
+    }
+
+    .alert-text {
       color: var(--alert);
-      font-size: 0.77rem;
-      font-weight: 700;
+      font-weight: 600;
     }
 
-    .footer {
-      margin-top: 1.35rem;
+    .safe-text {
+      color: var(--mint);
+      font-weight: 600;
+    }
+
+    .footer-links {
       text-align: center;
+      margin-top: 1.2rem;
     }
 
-    .footer a {
+    .xhalr-link {
       color: var(--muted);
       text-decoration: none;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       opacity: 0.8;
     }
 
-    .footer a:hover { opacity: 1; text-decoration: underline; color: var(--accent); }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
-      }
+    .xhalr-link:hover {
+      opacity: 1;
+      color: var(--accent);
     }
   </style>
 </head>
 <body>
   <div class="wrapper">
     <div class="card">
-      <div class="status-pill" id="badge">Dopaminový impuls zachycen</div>
+      <span class="status-pill" id="badge-pill">Dopaminový impuls záchycen</span>
 
       <h1>
-        Tohle není ztráta kontroly.
-        <span class="highlight">Je to jen krátká vlna.</span>
+        Tohle není selhání.
+        <span class="highlight">Je to jen biochémická vlna.</span>
       </h1>
 
-      <p class="subtitle">
-        Tělo teď hledá útěk. Nech toho na chvíli, vydechni pomalu a nechej vlnu odeznít sama.
-      </p>
+      <p class="subtitle">Můžeš tady jednoduše vydechnout, odpočinout si a vrátit se k práci s klidnější hlavou.</p>
 
-      <div class="visualizer" aria-label="Dýchací kruh a časovač">
-        <svg class="ring-svg" viewBox="0 0 210 210" aria-hidden="true">
-          <circle class="ring-bg" cx="105" cy="105" r="95"></circle>
-          <circle class="ring-bar" id="ring-bar" cx="105" cy="105" r="95"></circle>
+      <div class="visualizer">
+        <svg class="ring-svg" viewBox="0 0 220 220" aria-hidden="true">
+          <circle class="ring-bg" cx="110" cy="110" r="95"></circle>
+          <circle class="ring-bar" id="progress-bar" cx="110" cy="110" r="95"></circle>
         </svg>
-        <div class="breath-orb" id="breath-orb"></div>
+        <div class="breath-orb" id="aura"></div>
         <div class="center">
-          <div class="timer" id="timer" aria-live="polite">10:00</div>
-          <div class="guide" id="guide">Nádech · 4s</div>
+          <div class="timer" id="timer">10:00</div>
+          <div class="guide" id="breath-label">Nádech, 4s</div>
         </div>
       </div>
 
-      <div class="phase" id="phase">
-        <strong>Fáze 1/3:</strong> Tělo se pomalu uvolňuje a nervový systém přebírá klidnější rytmus.
-      </div>
+      <div class="phase-status" id="phase-text"><strong>Fáze 1/3:</strong> Zpomaluje se srdeční tep a tělo přejde do klidnějšího režimu.</div>
 
-      <div class="steps">
-        <div class="step" data-step="0" onclick="toggleStep(this)">
-          <div class="check">✓</div>
-          <div class="text"><strong>1. Opusť místnost:</strong> Vstaň a přejdi na světlo, pryč z postele a uzavřeného prostoru.</div>
+      <div class="checklist">
+        <div class="check-item done" onclick="toggleTask(this)">
+          <div class="check-box">✓</div>
+          <div class="check-text"><strong>1. Opuštění myšlenek:</strong> Všechno, co teď běží v hlavě, nech na chvíli být.</div>
         </div>
-        <div class="step" data-step="1" onclick="toggleStep(this)">
-          <div class="check">✓</div>
-          <div class="text"><strong>2. Chlad na obličej:</strong> Opláchnutí studenou vodou pomůže tělu zpomalit a znovu získat kontrolu.</div>
+        <div class="check-item done" onclick="toggleTask(this)">
+          <div class="check-box">✓</div>
+          <div class="check-text"><strong>2. Chladná noha:</strong> Opři si chodidla o zem a pomalu se zklidni.</div>
         </div>
-        <div class="step" data-step="2" onclick="toggleStep(this)">
-          <div class="check">✓</div>
-          <div class="text"><strong>3. HALT:</strong> Mám hlad, zlost, samotu nebo únavu? Základní signál mění směr impulzu.</div>
+        <div class="check-item" onclick="toggleTask(this)">
+          <div class="check-box">✓</div>
+          <div class="check-text"><strong>3. Hlavní kontrola:</strong> Znovu se nadechni a uvolni ramena.</div>
         </div>
       </div>
 
-      <div class="banner" id="done-banner">
-        <strong>✓ Klid znovu převzal kontrolu.</strong><br>
-        Teď jen pomalu dýchej a nechej vlnu odeznít sama.
-      </div>
+      <div class="all-done-banner" id="all-done">Relaxace je dokončena. Můžeš se vrátit zpět do klidnějšího tempa.</div>
 
-      <button class="toggle" type="button" id="toggle-facts" onclick="toggleFacts()">
-        Zobrazit fakta: co se teď děje v mém mozku? ↓
-      </button>
+      <button class="toggle-science" id="sci-btn" onclick="toggleScience()">Zobrazit fakta: Co se tady mění?</button>
     </div>
 
-    <div class="facts" id="facts-panel">
-      <details>
-        <summary>1. Proč mozek teď hledá úlevu</summary>
-        <div class="body">
-          Většina nutkání nevzniká z přetlaku sexuální energie, ale jako <span class="alert">únik od nepříjemného pocitu</span> – stresu, nudy, osamělosti nebo vyčerpání.<br><br>
-          Když teď vydržíš těchto 10 minut, učíš mozek, že ne každá bolest musí být okamžitě ztlumena. To je důležité: ne přemoci se, ale nechat vlnu odeznít.
+    <div class="science-panel" id="sci-panel">
+      <details open>
+        <summary>1. Emocionální anestézie</summary>
+        <div class="detail-body">
+          Při námaze, stresu nebo přetížení pracuje mozek v režimu „všechno je naléhavé“. Krátká pauza umožní tělu přesunout pozornost z alarmového stavu do klidnějšího režimu.
         </div>
       </details>
 
       <details>
-        <summary>2. Mechanika návyku</summary>
-        <div class="body">
-          Problémy v intimitě často vznikají ne „rozbitým mozkem“, ale dvěma přirozenými mechanismy:
-          <ul>
-            <li><span class="tag">Přetlak</span> Ruka a mozek se zvyknou na silnou, rychlou stimulaci, kterou lidské tělo běžně nevyžaduje.</li>
-            <li><span class="tag">Sledování</span> Když se hodnotíš zvenčí, vzniká úzkost a ztuhlost.</li>
-          </ul>
+        <summary>2. Mechanika dýchání</summary>
+        <div class="detail-body">
+          Při pomalém, hlubokém dýchání se zvyšuje aktivita parasympatického nervového systému. To snižuje svalové napětí a pomáhá organismu se zklidnit.
         </div>
       </details>
 
       <details>
-        <summary>3. Stud a mýtus „Dne 0“</summary>
-        <div class="body">
-          <span class="alert">Stud je hlavní palivem relapsu.</span> Když se obviňujeme, mozek hledá okamžitou úlevu – často právě tím, co zná jako rutinu.<br><br>
-          I když někdy zakolísáš, neznamená to, že jsi znovu na začátku. Nervové dráhy se posilují postupně. <span class="safe">Neexistuje „den nula“</span> v lidské biologii, jen další chvíle, kdy se naučíš nechat vlnu přejít bez reakce.
-        </div>
-      </details>
-
-      <details>
-        <summary>4. Čím vybít neklid hned teď</summary>
-        <div class="body">
-          <span class="alert">Nahromaděné napětí nejde vyřešit pasivním seděním u obrazovky.</span> Přetav ho do jednoduché fyzické akce:
-          <ul>
-            <li>20 rychlých kliků nebo dřepů.</li>
-            <li>5 minut venku na chladném vzduchu.</li>
-            <li>Krátká studená sprcha.</li>
-          </ul>
+        <summary>3. Kognitivní reset</summary>
+        <div class="detail-body">
+          Na chvíli vypnout přetížení mozku je často nejrychlejší cesta, jak se vrátit k funkčnímu myšlení. Zvyšte si tím schopnost rozhodovat jasněji a klidněji.
         </div>
       </details>
     </div>
 
-    <div class="footer">
-      <a href="https://xhalr.com/" target="_blank" rel="noopener">Samostatné dechové plátno (xhalr.com) ↗</a>
+    <div class="footer-links">
+      <a class="xhalr-link" href="https://xhalr.cz" target="_blank" rel="noreferrer">xhalr.cz</a>
     </div>
   </div>
 
   <script>
-    const STORAGE_KEY = 'pauza-steps-v1';
-    const TIMER_KEY = 'pauza-timer-v1';
-    const TOTAL_SECONDS = 600;
-    const ringBar = document.getElementById('ring-bar');
+    const VISUAL_PHASES = [
+      { label: 'Nádech, 4s', text: 'Fáze 1/3: Zpomaluje se srdeční tep a tělo přejde do klidnějšího režimu.' },
+      { label: 'Zadržení, 1s', text: 'Fáze 2/3: Tělo se stabilizuje a mozek přechází z pohotovosti do klidu.' },
+      { label: 'Výdech, 6s', text: 'Fáze 3/3: Svaly se uvolňují, stres klesá a mysl se vrací do rovnováhy.' }
+    ];
+
     const timerEl = document.getElementById('timer');
-    const guideEl = document.getElementById('guide');
-    const phaseEl = document.getElementById('phase');
-    const badgeEl = document.getElementById('badge');
-    const doneBanner = document.getElementById('done-banner');
-    const factsPanel = document.getElementById('facts-panel');
-    const factsBtn = document.getElementById('toggle-facts');
+    const guideEl = document.getElementById('breath-label');
+    const phaseEl = document.getElementById('phase-text');
+    const barEl = document.getElementById('progress-bar');
+    const totalSeconds = 600;
+    let remaining = totalSeconds;
+    let phaseIndex = 0;
+    let phaseTimer = 0;
+    const phaseDurations = [4, 1, 6];
 
-    let audioCtx = null;
-    let timerLoop = null;
-
-    function formatTime(totalSec) {
-      const minutes = Math.floor(totalSec / 60);
-      const seconds = totalSec % 60;
-      return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
     }
 
-    function unlockAudio() {
-      if (!audioCtx) {
-        const AudioCtor = window.AudioContext || window.webkitAudioContext;
-        if (!AudioCtor) return;
-        audioCtx = new AudioCtor();
-      }
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-      document.removeEventListener('pointerdown', unlockAudio);
-    }
-    document.addEventListener('pointerdown', unlockAudio);
-
-    function playChime() {
-      try {
-        if (!audioCtx) {
-          const AudioCtor = window.AudioContext || window.webkitAudioContext;
-          if (!AudioCtor) return;
-          audioCtx = new AudioCtor();
-        }
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(528, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.7);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 1.7);
-      } catch (e) {}
+    function updatePhase() {
+      const active = VISUAL_PHASES[phaseIndex];
+      guideEl.textContent = active.label;
+      phaseEl.innerHTML = `<strong>Fáze ${phaseIndex + 1}/${VISUAL_PHASES.length}:</strong> ${active.text.replace(/^Fáze \d+\/\d+:\s*/, '')}`;
     }
 
-    function updatePhaseText(remaining) {
-      if (remaining <= 420 && remaining > 180) {
-        phaseEl.innerHTML = '<strong>Fáze 2/3:</strong> Vlnu pozoruješ bez potřeby ji zrychlovat. Tělo se zklidňuje.';
+    function setProgress(value) {
+      const radius = 95;
+      const circumference = 2 * Math.PI * radius;
+      const offset = circumference * (1 - value);
+      barEl.style.strokeDasharray = `${circumference}`;
+      barEl.style.strokeDashoffset = `${offset}`;
+    }
+
+    function tick() {
+      if (remaining <= 0) {
+        remaining = 0;
+        timerEl.textContent = formatTime(remaining);
+        guideEl.textContent = 'Hotovo';
+        phaseEl.innerHTML = '<strong>Dokončeno:</strong> Pauza skončila. Můžeš se vrátit do klidnějšího tempa.';
+        setProgress(1);
         return;
       }
 
-      if (remaining <= 180 && remaining > 0) {
-        phaseEl.innerHTML = '<strong>Fáze 3/3:</strong> Potřeba po úlevě ustupuje a mysl se vrací do přítomnosti.';
-        badgeEl.textContent = 'Vlna se zklidňuje';
-        badgeEl.style.color = '#7fe7c5';
-        badgeEl.style.borderColor = 'rgba(127,231,197,0.25)';
-        badgeEl.style.background = 'rgba(127,231,197,0.08)';
-        return;
-      }
+      remaining -= 1;
+      timerEl.textContent = formatTime(remaining);
 
-      phaseEl.innerHTML = '<strong>Fáze 1/3:</strong> Tělo se pomalu uvolňuje a nervový systém přebírá klidnější rytmus.';
-      badgeEl.textContent = 'Dopaminový impuls zachycen';
-      badgeEl.style.color = '#f6c973';
-      badgeEl.style.borderColor = 'rgba(246,201,115,0.2)';
-      badgeEl.style.background = 'rgba(246,201,115,0.12)';
+      const progress = 1 - (remaining / totalSeconds);
+      setProgress(progress);
+
+      phaseTimer += 1;
+      const currentPhase = phaseDurations[phaseIndex];
+      if (phaseTimer >= currentPhase) {
+        phaseIndex = (phaseIndex + 1) % VISUAL_PHASES.length;
+        phaseTimer = 0;
+        updatePhase();
+      }
     }
 
-    function updateProgress(remaining) {
-      const progress = (TOTAL_SECONDS - remaining) / TOTAL_SECONDS;
-      const offset = 597 - Math.min(1, Math.max(0, progress)) * 597;
-      ringBar.style.strokeDashoffset = Math.max(0, offset);
+    setProgress(0);
+    updatePhase();
+    setInterval(tick, 1000);
 
-      if (remaining > 360) {
-        ringBar.style.stroke = 'var(--amber)';
-      } else if (remaining > 180) {
-        ringBar.style.stroke = 'var(--accent)';
+    function toggleTask(el) {
+      el.classList.toggle('done');
+      const remainingItems = [...document.querySelectorAll('.check-item')].filter(item => !item.classList.contains('done')).length;
+      const doneBanner = document.getElementById('all-done');
+      if (remainingItems === 0) {
+        doneBanner.classList.add('visible');
       } else {
-        ringBar.style.stroke = 'var(--mint)';
+        doneBanner.classList.remove('visible');
       }
     }
 
-    function renderTimer(remaining) {
-      timerEl.textContent = remaining > 0 ? formatTime(remaining) : 'HOTOVO';
-      if (remaining <= 0) timerEl.style.fontSize = '1.8rem';
-      else timerEl.style.fontSize = 'clamp(2.3rem, 6vw, 2.8rem)';
-      updateProgress(remaining);
-      updatePhaseText(remaining);
+    function toggleScience() {
+      const panel = document.getElementById('sci-panel');
+      const btn = document.getElementById('sci-btn');
+      panel.classList.toggle('visible');
+      btn.textContent = panel.classList.contains('visible') ? 'Skrýt fakta' : 'Zobrazit fakta: Co se tady mění?';
     }
-
-    function saveSteps() {
-      const items = [...document.querySelectorAll('.step')].map((step) => ({
-        done: step.classList.contains('done')
-      }));
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-    }
-
-    function restoreSteps() {
-      try {
-        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-        const steps = [...document.querySelectorAll('.step')];
-        if (saved.length) {
-          steps.forEach((step, index) => {
-            if (saved[index]?.done) step.classList.add('done');
-          });
-        }
-      } catch (e) {}
-      updateBanner();
-    }
-
-    function updateBanner() {
-      const steps = document.querySelectorAll('.step');
-      const done = document.querySelectorAll('.step.done');
-      doneBanner.style.display = steps.length && steps.length === done.length ? 'block' : 'none';
-    }
-
-    function toggleStep(stepEl) {
-      stepEl.classList.toggle('done');
-      updateBanner();
-      saveSteps();
-    }
-
-    function setGuideLabel(remainingSeconds) {
-      const phase = remainingSeconds % 12;
-      if (phase < 4) {
-        const rem = 4 - phase;
-        guideEl.textContent = `Nádech · ${rem}s`;
-        guideEl.style.color = '#8ed8ff';
-      } else if (phase === 4) {
-        guideEl.textContent = 'Zadrž · 1s';
-        guideEl.style.color = '#a5b4fc';
-      } else if (phase < 11) {
-        const rem = 11 - phase;
-        guideEl.textContent = `Výdech · ${rem}s`;
-        guideEl.style.color = '#7fe7c5';
-      } else {
-        guideEl.textContent = 'Klid · 1s';
-        guideEl.style.color = '#7fe7c5';
-      }
-    }
-
-    function startTimer(deadline) {
-      clearInterval(timerLoop);
-      timerLoop = setInterval(() => {
-        const remainingMs = Math.max(0, deadline - Date.now());
-        const remaining = Math.ceil(remainingMs / 1000);
-        renderTimer(remaining);
-        setGuideLabel(remaining);
-
-        if (remaining <= 0) {
-          clearInterval(timerLoop);
-          timerEl.textContent = 'HOTOVO';
-          guideEl.textContent = 'Vlna odezněla';
-          guideEl.style.color = '#7fe7c5';
-          phaseEl.innerHTML = '<strong>Hotovo.</strong> Tvoje tělo znovu našlo klidný rytmus.';
-          localStorage.setItem(TIMER_KEY, JSON.stringify({ finished: true, deadline: Date.now() }));
-          playChime();
-        }
-      }, 250);
-    }
-
-    function restoreTimer() {
-      try {
-        const saved = JSON.parse(localStorage.getItem(TIMER_KEY) || 'null');
-        if (!saved) {
-          startTimer(Date.now() + TOTAL_SECONDS * 1000);
-          return;
-        }
-
-        if (saved.finished) {
-          renderTimer(0);
-          guideEl.textContent = 'Vlna odezněla';
-          guideEl.style.color = '#7fe7c5';
-          phaseEl.innerHTML = '<strong>Hotovo.</strong> Tvoje tělo znovu našlo klidný rytmus.';
-          return;
-        }
-
-        const remaining = Math.max(0, Math.ceil((saved.deadline - Date.now()) / 1000));
-        if (remaining <= 0) {
-          renderTimer(0);
-          guideEl.textContent = 'Vlna odezněla';
-          guideEl.style.color = '#7fe7c5';
-          phaseEl.innerHTML = '<strong>Hotovo.</strong> Tvoje tělo znovu našlo klidný rytmus.';
-          return;
-        }
-
-        startTimer(saved.deadline);
-        renderTimer(remaining);
-        setGuideLabel(remaining);
-      } catch (e) {
-        startTimer(Date.now() + TOTAL_SECONDS * 1000);
-      }
-    }
-
-    function toggleFacts() {
-      factsPanel.classList.toggle('visible');
-      factsBtn.textContent = factsPanel.classList.contains('visible')
-        ? 'Skrýt fakta ↑'
-        : 'Zobrazit fakta: co se teď děje v mém mozku? ↓';
-    }
-
-    restoreSteps();
-    restoreTimer();
-    setGuideLabel(TOTAL_SECONDS);
   </script>
 </body>
 </html>
